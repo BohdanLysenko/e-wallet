@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  userservice_db:
+    image: postgres:latest
+    container_name: userservice_db_container
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: userservice_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - userservice_data:/var/lib/postgresql/data
+
+  bankingservice_db:
+    image: postgres:latest
+    container_name: bankingservice_db_container
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: bankingservice_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - bankingservice_data:/var/lib/postgresql/data
+
+volumes:
+  userservice_data:
+  bankingservice_data:

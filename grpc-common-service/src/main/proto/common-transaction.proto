@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package common.grpc.Transactions;
+
+option java_multiple_files = true;
+
+service TransactionService {
+
+  //  rpc getTransactionById(TransactionRequest) returns (TransactionResponse);
+  rpc CreateTransaction(CreateTransactionRequest) returns (TransactionResponse);
+  rpc CreateTransactionTransfer(CreateTransactionTransferRequest) returns (TransactionResponse);
+}
+message TransactionMessage{
+  int64 id = 1;
+  float amount = 2;
+  int64 card_id = 3;
+  int64 receiver_card_id = 4;
+  string transaction_type = 5;
+}
+message TransactionResponse{
+  TransactionMessage resp = 1;
+}
+
+message CreateTransactionRequest{
+  string token = 1;
+  float amount = 2;
+  int64 card_id = 3;
+  string transaction_type = 4;
+}
+
+message CreateTransactionTransferRequest{
+  string token = 1;
+  float amount = 2;
+  int64 card_id = 3;
+  int64 receiver_card_id = 4;
+}

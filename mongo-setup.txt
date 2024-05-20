@@ -1,0 +1,9 @@
+use transactions;
+db.dummyCollection.insertOne({ "key": "value" });
+db.createUser({
+    user: "root",
+    pwd: "password",
+    roles: ["readWrite", "dbAdmin"]
+})
+
+

@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package common.grpc.Users;
+
+option java_multiple_files = true;
+
+service WalletService {
+
+  rpc createWallet(CreateWalletRequest) returns (WalletResponse);
+  rpc getWalletByUserId(GetWalletByUserIdRequest) returns (WalletResponse);
+}
+
+message WalletMessage{
+  int64 walletId = 1;
+  string walletNumber = 2;
+  int64 userId = 3;
+}
+
+message CreateWalletRequest{
+  int64 userId = 1;
+}
+
+message WalletResponse{
+  WalletMessage resp = 1;
+}
+
+message GetWalletByUserIdRequest{
+  int64 userID = 1;
+}
+

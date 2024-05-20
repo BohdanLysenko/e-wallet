@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package common.grpc.Users;
+
+option java_multiple_files = true;
+
+service UserService {
+
+  rpc getUserDetails(UserTokenRequest) returns (UserDetailsMessage);
+}
+message UserMessage{
+  string email = 1;
+  bool enabled = 2;
+  int64 id = 3;
+  string role = 4;
+  string firstName = 5;
+  string lastName = 6;
+}
+
+message UserDetailsMessage{
+  UserMessage resp = 1;
+}
+
+message UserTokenRequest{
+  string token = 1;
+}
