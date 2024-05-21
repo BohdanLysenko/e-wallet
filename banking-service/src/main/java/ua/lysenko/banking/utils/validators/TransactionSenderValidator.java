@@ -9,10 +9,11 @@ import ua.lysenko.banking.validators.BaseValidator;
 public class TransactionSenderValidator implements BaseValidator<TransactionValidationModel> {
     @Override
     public boolean isValid(TransactionValidationModel transaction) {
-        return ((transaction.getTransactionType() == TransactionType.TRANSFER ||
-                transaction.getTransactionType() == TransactionType.WITHDRAWAL ||
-                transaction.getTransactionType() == TransactionType.PAYMENT) &&
-                transaction.getPersistUserId() == transaction.getRequestUserId());
-    }
+        return transaction.getTransactionType() == TransactionType.DEPOSIT ||
+                (transaction.getPersistUserId().equals(transaction.getRequestUserId()) &&
+                        (transaction.getTransactionType() == TransactionType.TRANSFER ||
+                                transaction.getTransactionType() == TransactionType.WITHDRAWAL ||
+                                transaction.getTransactionType() == TransactionType.PAYMENT));
 
+    }
 }

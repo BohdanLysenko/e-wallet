@@ -1,6 +1,7 @@
 package ua.lysenko.banking.card.service;
 
 import common.grpc.Users.*;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import ua.lysenko.banking.card.DTO.CardDTO;
 import ua.lysenko.banking.card.models.CreateCardResponseModel;
@@ -20,6 +21,7 @@ import java.util.Date;
 import java.util.Random;
 
 @Service
+@Transactional
 public class CardServiceImpl implements CardService {
 
     private final UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub;
@@ -75,11 +77,21 @@ public class CardServiceImpl implements CardService {
                 () -> new CardNotFoundException(
                         String.format(ExceptionKeys.CARD_NUMBER_NOT_FOUND.getMessage(), cardNumber)));
     }
+
     @Override
     public Card getById(Long id) {
         return cardRepository.findByIdAndActiveIsTrue(id).orElseThrow(
                 () -> new CardNotFoundException(
                         String.format(ExceptionKeys.CARD_ID_NOT_FOUND.getMessage())));
+    }
+
+    // ToDo try catch exception?
+    @Override
+    public boolean deposit(BigDecimal amount, Long cardId) {
+        Card card = getById(cardId);
+        card.setBalance(card.getBalance().add(amount));
+        cardRepository.save(card);
+        return true;
     }
 
     private long getCurrentUserId(String token) {

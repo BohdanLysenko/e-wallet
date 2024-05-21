@@ -2,6 +2,7 @@ package ua.lysenko.banking.transaction.service.implementation;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.lysenko.banking.card.service.CardService;
 import ua.lysenko.banking.entity.Card;
 import ua.lysenko.banking.entity.DepositTransaction;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@Transactional
 public class DepositTransactionService implements TransactionService {
 
     private final CardService cardService;
@@ -29,6 +31,7 @@ public class DepositTransactionService implements TransactionService {
     @Override
     public TransactionDTO processTransaction(TransactionDTO transactionDTO) {
         Card card = cardService.getByCardNumber(transactionDTO.getCardNumber());
+
         DepositTransaction depositTransaction = DepositTransaction.builder()
                 .transactionUUID(UUID.randomUUID())
                 .amount(transactionDTO.getAmount())
@@ -36,7 +39,12 @@ public class DepositTransactionService implements TransactionService {
                 .isSuspicious(false)
                 .isSuccessful(true)
                 .build();
+
+        boolean isDepositPerformed = cardService.deposit(transactionDTO.getAmount(), card.getId());
+
+        depositTransaction.setSuccessful(isDepositPerformed);
         depositTransaction = depositTransactionRepository.save(depositTransaction);
+
         transactionDTO = MapperUtils.map(depositTransaction, TransactionDTO.class);
         transactionDTO.setCardNumber(card.getCardNumber());
         transactionDTO.setTransactionType(TransactionType.DEPOSIT);

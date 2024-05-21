@@ -16,3 +16,8 @@ spring:
       ddl-auto: update
 grpc:
   port: 6575
+
+transaction:
+  limit:
+    single: 2000.00
+    daily: 10000.00

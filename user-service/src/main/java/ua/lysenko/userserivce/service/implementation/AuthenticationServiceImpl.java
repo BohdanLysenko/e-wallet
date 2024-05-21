@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.lysenko.userserivce.entity.Role;
 import ua.lysenko.userserivce.entity.User;
 import ua.lysenko.userserivce.exceptions.userexceptions.InvalidPasswordException;
@@ -26,6 +27,7 @@ import ua.lysenko.userserivce.validators.SignUpRequestValidator;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UsersRepository usersRepository;
     private final JwtService jwtService;
