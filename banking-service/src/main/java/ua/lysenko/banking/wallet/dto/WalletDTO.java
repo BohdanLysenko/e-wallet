@@ -6,5 +6,5 @@ import lombok.Data;
 public class WalletDTO {
     private Long id;
     private String walletNumber;
-    private Long userID;
+    private Long userId;
 }

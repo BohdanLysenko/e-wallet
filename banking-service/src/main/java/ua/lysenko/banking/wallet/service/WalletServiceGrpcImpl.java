@@ -26,7 +26,7 @@ public class WalletServiceGrpcImpl extends WalletServiceGrpc.WalletServiceImplBa
                 .setResp(WalletMessage.newBuilder()
                         .setWalletId(createdWalletDTO.getId())
                         .setWalletNumber(createdWalletDTO.getWalletNumber())
-                        .setUserId(createdWalletDTO.getUserID()).build())
+                        .setUserId(createdWalletDTO.getUserId()).build())
 
                 .build();
         responseObserver.onNext(response);

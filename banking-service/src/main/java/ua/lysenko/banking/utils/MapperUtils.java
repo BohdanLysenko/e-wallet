@@ -3,7 +3,9 @@ package ua.lysenko.banking.utils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Component;
+import ua.lysenko.banking.entity.DepositTransaction;
 import ua.lysenko.banking.entity.Wallet;
+import ua.lysenko.banking.transaction.DTO.TransactionDTO;
 import ua.lysenko.banking.wallet.dto.WalletDTO;
 
 @Component
@@ -24,5 +26,10 @@ public class MapperUtils {
         modelMapper.typeMap(Wallet.class, WalletDTO.class)
                 .addMappings(mapper -> mapper.using(Converters.UUID_TO_STRING_CONVERTER)
                         .map(Wallet::getWalletNumber, WalletDTO::setWalletNumber));
+    }
+    private static void typeMapDepositTransactionTransactionDTO() {
+        modelMapper.typeMap(DepositTransaction.class, TransactionDTO.class)
+                .addMappings(mapper -> mapper.using(Converters.UUID_TO_STRING_CONVERTER)
+                        .map(DepositTransaction::getTransactionUUID, TransactionDTO::setTransactionUUID));
     }
 }

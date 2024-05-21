@@ -1,4 +1,4 @@
-package ua.lysenko.banking.exception.Responses;
+package ua.lysenko.banking.exception.Response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;

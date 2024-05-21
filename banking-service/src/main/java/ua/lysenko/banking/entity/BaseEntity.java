@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import org.modelmapper.internal.bytebuddy.implementation.bind.annotation.Super;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -14,8 +16,11 @@ import java.util.Date;
 @Getter
 @Setter
 @MappedSuperclass
+@SuperBuilder
 //@EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
+
+
 
     @CreatedDate
     @Column(name = "created_date", updatable = false)
@@ -31,6 +36,10 @@ public class BaseEntity {
     @LastModifiedBy
     @Column(name = "last_modified_by")
     private String lastModifiedBy;
+
+    public BaseEntity(){
+
+    }
 
 
 }

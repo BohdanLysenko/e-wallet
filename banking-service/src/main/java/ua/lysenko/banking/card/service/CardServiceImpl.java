@@ -1,18 +1,17 @@
-package ua.lysenko.banking.card;
+package ua.lysenko.banking.card.service;
 
 import common.grpc.Users.*;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ua.lysenko.banking.card.DTO.CardDTO;
 import ua.lysenko.banking.card.models.CreateCardResponseModel;
 import ua.lysenko.banking.card.repository.CardRepository;
-import ua.lysenko.banking.card.textresources.ExceptionKeys;
-import ua.lysenko.banking.card.validators.UserDetailsResponseValidator;
+import ua.lysenko.banking.exception.CardNotFoundException;
+import ua.lysenko.banking.utils.textresources.ExceptionKeys;
+import ua.lysenko.banking.utils.validators.UserDetailsResponseValidator;
 import ua.lysenko.banking.entity.Card;
 import ua.lysenko.banking.entity.Wallet;
-import ua.lysenko.banking.exception.userexceptions.AccountIsLockedException;
+import ua.lysenko.banking.exception.AccountIsLockedException;
 import ua.lysenko.banking.utils.MapperUtils;
-import ua.lysenko.banking.wallet.dto.WalletDTO;
 import ua.lysenko.banking.wallet.service.WalletService;
 
 import java.math.BigDecimal;
@@ -62,12 +61,25 @@ public class CardServiceImpl implements CardService {
                 .cvv(100 + (int) (Math.random() * ((999 - 100) + 1)))
                 .expirationDate(calculateExpirationDate())
                 .cardNumber(generateCardNumber())
-                .isActive(true)
+                .active(true)
                 .wallet(wallet)
                 .build();
         CardDTO cardDTO = MapperUtils.map(cardRepository.save(card), CardDTO.class);
-        cardDTO.setWalletNumber(wallet.getWalletNumber());
+        cardDTO.setWalletNumber(wallet.getWalletNumber().toString());
         return cardDTO;
+    }
+
+    @Override
+    public Card getByCardNumber(String cardNumber) {
+        return cardRepository.findByCardNumberAndActiveIsTrue(cardNumber).orElseThrow(
+                () -> new CardNotFoundException(
+                        String.format(ExceptionKeys.CARD_NUMBER_NOT_FOUND.getMessage(), cardNumber)));
+    }
+    @Override
+    public Card getById(Long id) {
+        return cardRepository.findByIdAndActiveIsTrue(id).orElseThrow(
+                () -> new CardNotFoundException(
+                        String.format(ExceptionKeys.CARD_ID_NOT_FOUND.getMessage())));
     }
 
     private long getCurrentUserId(String token) {

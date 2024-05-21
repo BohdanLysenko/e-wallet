@@ -1,4 +1,4 @@
-package ua.lysenko.banking.card.validators;
+package ua.lysenko.banking.utils.validators;
 
 import common.grpc.Users.UserMessage;
 import org.springframework.stereotype.Component;

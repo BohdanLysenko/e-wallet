@@ -7,14 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@DiscriminatorValue("Transfer")
+@DiscriminatorValue("WITHDRAWAL")
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-public class Transfer extends Transaction {
-
-    private Long receiverCardId;
+public class WithdrawalTransaction extends Transaction {
 
 }

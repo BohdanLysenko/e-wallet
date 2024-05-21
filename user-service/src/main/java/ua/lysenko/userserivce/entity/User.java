@@ -9,7 +9,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -98,8 +97,4 @@ public class User implements UserDetails {
         return enabled;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = ZonedDateTime.now(ZoneId.of("GMT+3"));
-    }
 }

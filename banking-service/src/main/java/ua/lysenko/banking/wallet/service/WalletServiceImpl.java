@@ -25,19 +25,21 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public WalletDTO createWallet(Long userID) {
         Wallet createdWallet = Wallet.builder()
-                .userID(userID)
+                .userId(userID)
                 .walletNumber(UUID.randomUUID())
                 .build();
-        WalletDTO createdWalletDTO = MapperUtils.map(walletRepository.save(createdWallet), WalletDTO.class);
+        createdWallet = walletRepository.save(createdWallet);
+        //Todo formatting text resources
+        WalletDTO createdWalletDTO = MapperUtils.map(createdWallet, WalletDTO.class);
         logger.info(String.format("Created wallet[id: %s, number: %s, " +
                         "userId: %s]", createdWalletDTO.getId(),
-                createdWalletDTO.getWalletNumber(), createdWalletDTO.getUserID()));
+                createdWalletDTO.getWalletNumber(), createdWalletDTO.getUserId()));
         return createdWalletDTO;
     }
 
     // ToDo expection message handler
     @Override
     public Wallet getWalletByUserId(Long userId) {
-        return walletRepository.findByUserID(userId).orElseThrow(() -> new EntityNotFoundException("no such user"));
+        return walletRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException("no such user"));
     }
 }
