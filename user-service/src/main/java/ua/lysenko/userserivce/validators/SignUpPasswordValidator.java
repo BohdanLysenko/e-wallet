@@ -1,8 +1,10 @@
 package ua.lysenko.userserivce.validators;
 
+import org.springframework.stereotype.Component;
 import ua.lysenko.userserivce.ui.models.SignUpRequest;
 
-public class SignUpRequestValidator implements BaseValidator<SignUpRequest> {
+@Component
+public class SignUpPasswordValidator implements BaseValidator<SignUpRequest> {
 
     @Override
     public boolean isValid(SignUpRequest signUpRequest) {

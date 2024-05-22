@@ -84,7 +84,8 @@ public class TransactionServiceContext {
             log.warn(ExceptionKeys.SINGLE_TRANSACTION_LIMIT_EXCEEDED.getMessage());
             result.setValid(false);
         }
-        if (!withdrawalTransactionLimitValidator.isValid(transactionValidationModel)) {
+        if (transactionType.equals(TransactionType.WITHDRAWAL) &&
+                !withdrawalTransactionLimitValidator.isValid(transactionValidationModel)) {
             log.warn(String.format(
                     ExceptionKeys.DAILY_WITHDRAWAL_LIMIT_EXCEEDED.getMessage(),
                     transaction.getCardNumber()));

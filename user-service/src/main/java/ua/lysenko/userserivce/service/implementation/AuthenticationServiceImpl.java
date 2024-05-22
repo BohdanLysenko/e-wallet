@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ua.lysenko.userserivce.entity.Role;
 import ua.lysenko.userserivce.entity.User;
+import ua.lysenko.userserivce.exceptions.NonUniqueEmailException;
 import ua.lysenko.userserivce.exceptions.userexceptions.InvalidPasswordException;
 import ua.lysenko.userserivce.repository.UsersRepository;
 import ua.lysenko.userserivce.service.AuthenticationService;
@@ -23,11 +23,13 @@ import ua.lysenko.userserivce.ui.models.SignInRequest;
 import ua.lysenko.userserivce.ui.models.SignInResponse;
 import ua.lysenko.userserivce.ui.models.SignUpRequest;
 import ua.lysenko.userserivce.ui.models.SignUpResponse;
-import ua.lysenko.userserivce.validators.SignUpRequestValidator;
+import ua.lysenko.userserivce.validators.SignUpEmailValidator;
+import ua.lysenko.userserivce.validators.SignUpPasswordValidator;
+
+import static ua.lysenko.userserivce.textresources.ExceptionKeys.EMAIL_IS_NOT_UNIQUE;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UsersRepository usersRepository;
     private final JwtService jwtService;
@@ -36,11 +38,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
     private final WalletServiceGrpc.WalletServiceBlockingStub walletServiceBlockingStub;
 
+    private final SignUpPasswordValidator signUpPasswordValidator;
+    private final SignUpEmailValidator signUpEmailValidator;
+
     Logger logger = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 
     @Override
     public SignUpResponse signup(SignUpRequest request) {
-        if (!new SignUpRequestValidator().isValid(request)) {
+        if (!signUpEmailValidator.isValid(request)) {
+            throw new NonUniqueEmailException(EMAIL_IS_NOT_UNIQUE.getMessage());
+        }
+        if (!signUpPasswordValidator.isValid(request)) {
             logger.error("Invalid password upon signup for user: " + request.getEmail());
             throw new InvalidPasswordException(ExceptionKeys.PASSWORD_IS_INVALID.getMessage());
         }

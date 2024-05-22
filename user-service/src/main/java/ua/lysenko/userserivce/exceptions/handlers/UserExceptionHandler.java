@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ua.lysenko.userserivce.exceptions.NonUniqueEmailException;
 import ua.lysenko.userserivce.textresources.ExceptionKeys;
 import ua.lysenko.userserivce.exceptions.Responses.ApiExceptionModel;
 import ua.lysenko.userserivce.exceptions.userexceptions.InvalidPasswordException;
@@ -57,16 +58,12 @@ public class UserExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiExceptionModel, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(PSQLException.class)
+    @ExceptionHandler(NonUniqueEmailException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ApiExceptionModel> handlePSQLException(PSQLException e) {
-        ApiExceptionModel apiExceptionModel = new ApiExceptionModel();
-        StringBuilder errorMessageBuilder = new StringBuilder();
-        String errorMessage = e.getMessage();
-        if (errorMessage.contains("unique_user_email")){
-            Utils.appendToMessage(errorMessageBuilder, ExceptionKeys.EMAIL_IS_NOT_UNIQUE.getMessage());
-        }
-        apiExceptionModel.setMessage(errorMessageBuilder.toString());
+    public ResponseEntity<ApiExceptionModel> handleNonUniqueEmailException(NonUniqueEmailException e) {
+        ApiExceptionModel apiExceptionModel = ApiExceptionModel.builder()
+                .message(e.getMessage())
+                .build();
         return new ResponseEntity<>(apiExceptionModel, HttpStatus.BAD_REQUEST);
     }
 }

@@ -10,7 +10,6 @@ import ua.lysenko.banking.transaction.DTO.TransactionDTO;
 import ua.lysenko.banking.transaction.repository.DepositTransactionRepository;
 import ua.lysenko.banking.transaction.service.TransactionService;
 import ua.lysenko.banking.transaction.enums.TransactionType;
-import ua.lysenko.banking.utils.MapperUtils;
 import ua.lysenko.banking.utils.Mappers.DepositTransactionMapper;
 
 import java.util.UUID;
@@ -25,9 +24,10 @@ public class DepositTransactionService implements TransactionService {
 
     private final DepositTransactionMapper depositTransactionMapper;
 
-    public DepositTransactionService(CardService cardService, DepositTransactionRepository depositTransactionRepository) {
+    public DepositTransactionService(CardService cardService, DepositTransactionRepository depositTransactionRepository, DepositTransactionMapper depositTransactionMapper) {
         this.cardService = cardService;
         this.depositTransactionRepository = depositTransactionRepository;
+        this.depositTransactionMapper = depositTransactionMapper;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class DepositTransactionService implements TransactionService {
         depositTransaction.setSuccessful(isDepositPerformed);
         depositTransaction = depositTransactionRepository.save(depositTransaction);
 
-        transactionDTO = MapperUtils.map(depositTransaction, TransactionDTO.class);
+        transactionDTO = depositTransactionMapper.toTransactionDTO(depositTransaction);
         transactionDTO.setCardNumber(card.getCardNumber());
         transactionDTO.setTransactionType(TransactionType.DEPOSIT);
         return transactionDTO;

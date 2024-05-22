@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ua.lysenko.banking.entity.Wallet;
 import ua.lysenko.banking.utils.MapperUtils;
+import ua.lysenko.banking.utils.Mappers.WalletMapper;
 import ua.lysenko.banking.wallet.dto.WalletDTO;
 import ua.lysenko.banking.wallet.repository.WalletRepository;
 
@@ -16,10 +17,13 @@ public class WalletServiceImpl implements WalletService {
 
     private final WalletRepository walletRepository;
 
+    private final WalletMapper walletMapper;
+
     Logger logger = LoggerFactory.getLogger(WalletServiceImpl.class);
 
-    public WalletServiceImpl(WalletRepository walletRepository) {
+    public WalletServiceImpl(WalletRepository walletRepository, WalletMapper walletMapper) {
         this.walletRepository = walletRepository;
+        this.walletMapper = walletMapper;
     }
 
     @Override
@@ -30,7 +34,7 @@ public class WalletServiceImpl implements WalletService {
                 .build();
         createdWallet = walletRepository.save(createdWallet);
         //Todo formatting text resources
-        WalletDTO createdWalletDTO = MapperUtils.map(createdWallet, WalletDTO.class);
+        WalletDTO createdWalletDTO = walletMapper.toWalletDTO(createdWallet);
         logger.info(String.format("Created wallet[id: %s, number: %s, " +
                         "userId: %s]", createdWalletDTO.getId(),
                 createdWalletDTO.getWalletNumber(), createdWalletDTO.getUserId()));
