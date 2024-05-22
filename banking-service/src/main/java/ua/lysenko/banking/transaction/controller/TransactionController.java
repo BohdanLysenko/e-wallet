@@ -9,7 +9,7 @@ import ua.lysenko.banking.transaction.service.TransactionServiceContext;
 import ua.lysenko.banking.transaction.enums.TransactionType;
 import ua.lysenko.banking.transaction.models.CreateTransactionRequestModel;
 import ua.lysenko.banking.transaction.models.TransactionResponseModel;
-import ua.lysenko.banking.utils.MapperUtils;
+import ua.lysenko.banking.utils.Mappers.TransactionContextMapper;
 
 @RestController
 @RequestMapping("/transactions")
@@ -17,16 +17,30 @@ public class TransactionController {
 
     private final TransactionServiceContext transactionContext;
 
-    public TransactionController(TransactionServiceContext transactionContext) {
+    private final TransactionContextMapper transactionContextMapper;
+
+    public TransactionController(TransactionServiceContext transactionContext, TransactionContextMapper transactionContextMapper) {
         this.transactionContext = transactionContext;
+        this.transactionContextMapper = transactionContextMapper;
     }
 
     @PostMapping(value = "/deposit", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TransactionResponseModel> createTransaction(@RequestHeader("Authorization") String authorizationHeader,
-                                                                      @RequestBody CreateTransactionRequestModel request) {
-        TransactionDTO transactionDTO = MapperUtils.map(request, TransactionDTO.class);
-        TransactionResponseModel response = MapperUtils.map(transactionContext.processTransaction(authorizationHeader,
-                transactionDTO, TransactionType.DEPOSIT), TransactionResponseModel.class);
+    public ResponseEntity<TransactionResponseModel> deposit(@RequestHeader("Authorization") String authorizationHeader,
+                                                            @RequestBody CreateTransactionRequestModel request) {
+        TransactionDTO transactionDTO = transactionContextMapper.toTransactionDTO(request);
+        TransactionResponseModel response = transactionContextMapper.toTransactionResponseModel(
+                transactionContext.processTransaction(authorizationHeader,
+                        transactionDTO, TransactionType.DEPOSIT));
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PostMapping(value = "/withdraw", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TransactionResponseModel> withdraw(@RequestHeader("Authorization") String authorizationHeader,
+                                                             @RequestBody CreateTransactionRequestModel request) {
+        TransactionDTO transactionDTO = transactionContextMapper.toTransactionDTO(request);
+        TransactionResponseModel response = transactionContextMapper.toTransactionResponseModel(
+                transactionContext.processTransaction(authorizationHeader,
+                        transactionDTO, TransactionType.WITHDRAWAL));
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

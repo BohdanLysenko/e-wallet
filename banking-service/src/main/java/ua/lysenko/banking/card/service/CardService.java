@@ -16,4 +16,5 @@ public interface CardService {
     Card getById(Long id);
 
     boolean deposit(BigDecimal amount, Long cardId);
+    boolean withdraw(BigDecimal amount, Long cardId);
 }

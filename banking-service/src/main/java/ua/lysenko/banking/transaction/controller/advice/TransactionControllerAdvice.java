@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ua.lysenko.banking.exception.InsufficientCardBalanceException;
 import ua.lysenko.banking.exception.Response.ApiExceptionModel;
 import ua.lysenko.banking.exception.TransactionLimitExceededException;
 import ua.lysenko.banking.exception.TransactionUnauthorizedException;
@@ -22,11 +23,20 @@ public class TransactionControllerAdvice extends ResponseEntityExceptionHandler 
         return new ResponseEntity<>(apiExceptionModel, HttpStatus.UNAUTHORIZED);
     }
     @ExceptionHandler(TransactionLimitExceededException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiExceptionModel> handleTransactionLimitExceededException(TransactionLimitExceededException e) {
         ApiExceptionModel apiExceptionModel = ApiExceptionModel.builder()
                 .message(e.getMessage())
                 .build();
-        return new ResponseEntity<>(apiExceptionModel, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(apiExceptionModel, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InsufficientCardBalanceException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiExceptionModel> handleInsufficientBalanceException(InsufficientCardBalanceException e) {
+        ApiExceptionModel apiExceptionModel = ApiExceptionModel.builder()
+                .message(e.getMessage())
+                .build();
+        return new ResponseEntity<>(apiExceptionModel, HttpStatus.BAD_REQUEST);
     }
 }

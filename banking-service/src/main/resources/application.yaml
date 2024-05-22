@@ -20,4 +20,8 @@ grpc:
 transaction:
   limit:
     single: 2000.00
+    suspicious: 10000
     daily: 10000.00
+withdrawal:
+  limit:
+    daily: 5000

@@ -3,6 +3,8 @@ package ua.lysenko.banking.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.envers.AuditOverride;
+import org.hibernate.envers.Audited;
 
 import java.util.UUID;
 
@@ -11,8 +13,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @SuperBuilder
-//@Audited
-//@AuditOverride(forClass = Auditable.class)
+@Audited
+@AuditOverride(forClass = BaseEntity.class)
 public class Wallet extends BaseEntity {
 
     @Id

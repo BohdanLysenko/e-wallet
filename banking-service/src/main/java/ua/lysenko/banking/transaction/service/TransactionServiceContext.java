@@ -8,15 +8,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ua.lysenko.banking.card.service.CardService;
 import ua.lysenko.banking.exception.AccountIsLockedException;
-import ua.lysenko.banking.exception.TransactionLimitExceededException;
 import ua.lysenko.banking.exception.TransactionUnauthorizedException;
 import ua.lysenko.banking.transaction.DTO.TransactionDTO;
 import ua.lysenko.banking.transaction.enums.TransactionType;
 import ua.lysenko.banking.transaction.models.TransactionValidationModel;
+import ua.lysenko.banking.transaction.models.TransactionValidationResult;
+import ua.lysenko.banking.utils.Mappers.TransactionContextMapper;
 import ua.lysenko.banking.utils.textresources.ExceptionKeys;
-import ua.lysenko.banking.utils.validators.TransactionAmountLimitValidator;
-import ua.lysenko.banking.utils.validators.TransactionSenderValidator;
-import ua.lysenko.banking.utils.validators.UserDetailsResponseValidator;
+import ua.lysenko.banking.utils.validators.*;
 
 import java.util.Map;
 
@@ -29,12 +28,20 @@ public class TransactionServiceContext {
     private final UserDetailsResponseValidator userDetailsResponseValidator;
     private final TransactionSenderValidator transactionSenderValidator;
     private final TransactionAmountLimitValidator transactionAmountLimitValidator;
+
+    private final WithdrawalTransactionLimitValidator withdrawalTransactionLimitValidator;
+
+    private final SuspiciousTransactionValidator suspiciousTransactionValidator;
     private final CardService cardService;
+
+    private final TransactionContextMapper transactionMapper;
 
     public TransactionDTO processTransaction(String authorizationHeader,
                                              TransactionDTO transaction,
                                              TransactionType transactionType) {
-        validateTransaction(authorizationHeader, transaction, transactionType);
+        TransactionValidationResult validatedTransaction = validateTransaction(authorizationHeader,
+                transaction, transactionType);
+        transaction = transactionMapper.updateTransactionDTO(validatedTransaction, transaction);
         TransactionService transactionService = processTransactionByType.get(transactionType);
         return transactionService.processTransaction(transaction);
     }
@@ -59,17 +66,35 @@ public class TransactionServiceContext {
                 .build();
     }
 
-    private void validateTransaction(String authorizationHeader, TransactionDTO transaction, TransactionType transactionType) {
+    private TransactionValidationResult validateTransaction(String authorizationHeader, TransactionDTO transaction, TransactionType transactionType) {
         UserMessage user = getCurrentUser(authorizationHeader);
+        TransactionValidationModel transactionValidationModel = getTransactionValidationModel(transaction, transactionType, user);
+        TransactionValidationResult result = TransactionValidationResult.builder()
+                .isValid(true)
+                .isSuspicious(false)
+                .build();
         if (!userDetailsResponseValidator.isValid(user)) {
+            log.warn(ExceptionKeys.ACCOUNT_IS_LOCKED.getMessage());
             throw new AccountIsLockedException(ExceptionKeys.ACCOUNT_IS_LOCKED.getMessage());
         }
-        TransactionValidationModel transactionValidationModel = getTransactionValidationModel(transaction, transactionType, user);
         if (!transactionSenderValidator.isValid(transactionValidationModel)) {
             throw new TransactionUnauthorizedException(ExceptionKeys.TRANSACTION_UNAUTHORIZED.getMessage());
         }
         if (!transactionAmountLimitValidator.isValid(transactionValidationModel)) {
-            throw new TransactionLimitExceededException(ExceptionKeys.SINGLE_TRANSACTION_LIMIT_EXCEEDED.getMessage());
+            log.warn(ExceptionKeys.SINGLE_TRANSACTION_LIMIT_EXCEEDED.getMessage());
+            result.setValid(false);
         }
+        if (!withdrawalTransactionLimitValidator.isValid(transactionValidationModel)) {
+            log.warn(String.format(
+                    ExceptionKeys.DAILY_WITHDRAWAL_LIMIT_EXCEEDED.getMessage(),
+                    transaction.getCardNumber()));
+            result.setValid(false);
+        }
+        if (!suspiciousTransactionValidator.isValid(transactionValidationModel)) {
+            log.warn(ExceptionKeys.SUSPICIOUS_TRANSACTION.getMessage());
+            result.setSuspicious(true);
+        }
+        return result;
+
     }
 }

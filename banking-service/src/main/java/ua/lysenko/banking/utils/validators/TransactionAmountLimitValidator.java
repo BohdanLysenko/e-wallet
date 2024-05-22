@@ -12,7 +12,7 @@ public class TransactionAmountLimitValidator implements BaseValidator<Transactio
 
     private final BigDecimal singleTransactionAmountLimit;
 
-    public TransactionAmountLimitValidator(@Value("${transaction.limit:2000}")
+    public TransactionAmountLimitValidator(@Value("${transaction.limit.single}")
                                            BigDecimal singleTransactionAmountLimit) {
         this.singleTransactionAmountLimit = singleTransactionAmountLimit;
     }

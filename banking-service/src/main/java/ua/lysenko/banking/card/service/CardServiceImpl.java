@@ -1,18 +1,21 @@
 package ua.lysenko.banking.card.service;
 
-import common.grpc.Users.*;
+import common.grpc.Users.UserMessage;
+import common.grpc.Users.UserServiceGrpc;
+import common.grpc.Users.UserTokenRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import ua.lysenko.banking.card.DTO.CardDTO;
 import ua.lysenko.banking.card.models.CreateCardResponseModel;
 import ua.lysenko.banking.card.repository.CardRepository;
-import ua.lysenko.banking.exception.CardNotFoundException;
-import ua.lysenko.banking.utils.textresources.ExceptionKeys;
-import ua.lysenko.banking.utils.validators.UserDetailsResponseValidator;
 import ua.lysenko.banking.entity.Card;
 import ua.lysenko.banking.entity.Wallet;
 import ua.lysenko.banking.exception.AccountIsLockedException;
-import ua.lysenko.banking.utils.MapperUtils;
+import ua.lysenko.banking.exception.CardNotFoundException;
+import ua.lysenko.banking.exception.InsufficientCardBalanceException;
+import ua.lysenko.banking.utils.Mappers.CardMapper;
+import ua.lysenko.banking.utils.textresources.ExceptionKeys;
+import ua.lysenko.banking.utils.validators.UserDetailsResponseValidator;
 import ua.lysenko.banking.wallet.service.WalletService;
 
 import java.math.BigDecimal;
@@ -32,14 +35,17 @@ public class CardServiceImpl implements CardService {
 
     private final WalletService walletService;
 
+    private final CardMapper cardMapper;
+
     public CardServiceImpl(UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub,
                            CardRepository cardRepository,
                            UserDetailsResponseValidator userDetailsResponseValidator,
-                           WalletService walletService) {
+                           WalletService walletService, CardMapper cardMapper) {
         this.userServiceBlockingStub = userServiceBlockingStub;
         this.cardRepository = cardRepository;
         this.userDetailsResponseValidator = userDetailsResponseValidator;
         this.walletService = walletService;
+        this.cardMapper = cardMapper;
     }
 
 
@@ -49,7 +55,7 @@ public class CardServiceImpl implements CardService {
             throw new AccountIsLockedException(ExceptionKeys.ACCOUNT_IS_LOCKED.getMessage());
         }
         CardDTO cardDTO = createCardByUserId(user.getId());
-        CreateCardResponseModel createdCard = MapperUtils.map(cardDTO, CreateCardResponseModel.class);
+        CreateCardResponseModel createdCard = cardMapper.toCreateCardResponseModel(cardDTO);
         createdCard.setCardHolderName(user.getFirstName());
         createdCard.setCardHolderLastName(user.getLastName());
         return createdCard;
@@ -66,7 +72,7 @@ public class CardServiceImpl implements CardService {
                 .active(true)
                 .wallet(wallet)
                 .build();
-        CardDTO cardDTO = MapperUtils.map(cardRepository.save(card), CardDTO.class);
+        CardDTO cardDTO = cardMapper.toCardDto(cardRepository.save(card));
         cardDTO.setWalletNumber(wallet.getWalletNumber().toString());
         return cardDTO;
     }
@@ -85,13 +91,25 @@ public class CardServiceImpl implements CardService {
                         String.format(ExceptionKeys.CARD_ID_NOT_FOUND.getMessage())));
     }
 
-    // ToDo try catch exception?
     @Override
     public boolean deposit(BigDecimal amount, Long cardId) {
         Card card = getById(cardId);
         card.setBalance(card.getBalance().add(amount));
         cardRepository.save(card);
         return true;
+    }
+
+    @Override
+    public boolean withdraw(BigDecimal amount, Long cardId) {
+        Card card = getById(cardId);
+        if (card.getBalance().compareTo(amount) >= 0) {
+            card.setBalance(card.getBalance().subtract(amount));
+            cardRepository.save(card);
+            return true;
+        }
+        throw new InsufficientCardBalanceException(
+                String.format(ExceptionKeys.INSUFFICIENT_CARD_BALANCE_EXCEPTION.getMessage(), amount,
+                        card.getBalance()));
     }
 
     private long getCurrentUserId(String token) {
