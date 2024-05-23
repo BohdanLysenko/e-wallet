@@ -2,49 +2,10 @@ server:
   port: 8080
 spring:
   config:
-    import: optional:configserver:http://localhost:9297
+    import:
+    - optional:configserver:http://localhost:9297
+    - optional:classpath:route-users.yaml
   application:
     name: gateway-service
 
-  cloud:
-    gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
-      default-filters:
-        - PrefixPath=/api/v1
-      routes:
-        - id: users_opentest_route
-          uri: ${USERS_ROUTE_URI:http://localhost:8081}
-          predicates:
-            - Path=/users/status/opentest
-            - Method=GET
-          filters:
-            - AddResponseHeader=X-Powered-By,BohdanTest
-        - id: users-status-test
-          uri: ${USERS_ROUTE_URI:http://localhost:8081}
-          predicates:
-            - Method=GET
-            - Header=Authorization, Bearer (.*)
-            - Path=/users/status/test
-          filters:
-            - AuthorizationHeaderFilter
-        - id: users-sign-up
-          uri: ${USERS_ROUTE_URI:http://localhost:8081}
-          predicates:
-            - Method=POST
-            - Path=/auth/signup
-        - id: users-sign-in
-          uri: ${USERS_ROUTE_URI:http://localhost:8081}
-          predicates:
-            - Method=POST
-            - Path=/auth/signin
-        - id: users-get-user-by-id
-          uri: ${USERS_ROUTE_URI:http://localhost:8081}
-          predicates:
-            - Method=GET
-            - Header=Authorization, Bearer (.*)
-            - Path=/users/**
-          filters:
-            - AuthorizationHeaderFilter
+BANKING_ROUTE_URI: http://localhost:8146

@@ -1,5 +1,6 @@
 package ua.lysenko.userserivce.controllers;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,12 +22,14 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/signup")
-    public ResponseEntity<SignUpResponse> signup(@RequestBody SignUpRequest request) {
-        return ResponseEntity.ok(authenticationService.signUp(request));
+    public ResponseEntity<SignUpResponse> signUp(@RequestBody SignUpRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(authenticationService.signUp(request));
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<SignInResponse> signin(@RequestBody SignInRequest request) {
-        return ResponseEntity.ok(authenticationService.signIn(request));
+    public ResponseEntity<SignInResponse> signIn(@RequestBody SignInRequest request) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(authenticationService.signIn(request));
     }
 }

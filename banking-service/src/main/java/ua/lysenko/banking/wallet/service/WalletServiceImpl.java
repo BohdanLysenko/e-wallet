@@ -9,6 +9,7 @@ import ua.lysenko.banking.utils.Mappers.WalletMapper;
 import ua.lysenko.banking.wallet.dto.WalletDTO;
 import ua.lysenko.banking.wallet.repository.WalletRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -44,5 +45,10 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public Wallet getWalletByUserId(Long userId) {
         return walletRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException("no such wallet"));
+    }
+
+    @Override
+    public List<Wallet> getAllWallets() {
+        return walletRepository.findAll();
     }
 }

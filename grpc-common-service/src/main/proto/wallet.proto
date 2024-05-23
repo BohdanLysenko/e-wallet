@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package common.grpc.users;
 
+import "google/protobuf/empty.proto";
+
 option java_multiple_files = true;
 
 service WalletService {
@@ -9,6 +11,7 @@ service WalletService {
   rpc createWallet(CreateWalletRequest) returns (WalletResponse);
   rpc getWalletByUserId(GetWalletByUserIdRequest) returns (WalletResponse);
   rpc Check(HealthCheckRequest) returns (HealthCheckResponse);
+  rpc getAllWallets(google.protobuf.Empty) returns (AllWalletsResponse);
 }
 
 message WalletMessage{
@@ -34,4 +37,8 @@ message HealthCheckRequest {}
 message HealthCheckResponse {
   bool healthy = 1;
 }
+message AllWalletsResponse {
+  repeated WalletMessage wallets = 1;
+}
+
 

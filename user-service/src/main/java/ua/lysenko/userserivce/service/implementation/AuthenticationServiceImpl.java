@@ -90,7 +90,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
     }
 
-
     @Override
     public SignInResponse signIn(SignInRequest request) {
         authenticationManager.authenticate(
