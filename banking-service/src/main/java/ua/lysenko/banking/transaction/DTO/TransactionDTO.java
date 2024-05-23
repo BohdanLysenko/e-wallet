@@ -23,6 +23,7 @@ public class TransactionDTO {
     protected Long merchantId;
     protected Long destinationCardId;
     protected String destinationCardNumber;
+
     protected boolean isSuccessful = true;
     protected TransactionType transactionType;
 

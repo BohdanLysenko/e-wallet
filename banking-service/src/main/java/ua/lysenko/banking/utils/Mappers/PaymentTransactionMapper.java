@@ -1,8 +1,10 @@
 package ua.lysenko.banking.utils.Mappers;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 import ua.lysenko.banking.entity.PaymentTransaction;
+import ua.lysenko.banking.entity.Transaction;
 import ua.lysenko.banking.entity.TransferTransaction;
 import ua.lysenko.banking.transaction.DTO.TransactionDTO;
 

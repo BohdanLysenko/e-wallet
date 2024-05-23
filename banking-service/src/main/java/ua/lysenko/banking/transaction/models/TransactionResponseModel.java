@@ -19,7 +19,7 @@ public class TransactionResponseModel {
     private boolean isSuccessful;
     private Instant createdDate;
     private String cardNumber;
-    @JsonIgnoreProperties
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String destinationCardNumber;
     private String transactionType;
 

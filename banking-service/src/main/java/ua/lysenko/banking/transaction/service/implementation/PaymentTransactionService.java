@@ -30,8 +30,7 @@ public class PaymentTransactionService implements TransactionService {
     @Override
     public TransactionDTO processTransaction(TransactionDTO transactionDTO) {
         Card card = cardService.getByCardNumber(transactionDTO.getCardNumber());
-        Long destinationCardId = cardService.getIdByCardNumber(transactionDTO.getDestinationCardNumber());
-        PaymentTransaction paymentTransaction = buildPaymentTransaction(transactionDTO, card, destinationCardId);
+        PaymentTransaction paymentTransaction = buildPaymentTransaction(transactionDTO, card, transactionDTO.getMerchantId());
         if (!paymentTransaction.isSuccessful()) {
             paymentTransactionRepository.save(paymentTransaction);
         } else {
@@ -42,7 +41,7 @@ public class PaymentTransactionService implements TransactionService {
         transactionDTO = paymentTransactionMapper.toTransactionDTO(paymentTransaction);
         transactionDTO.setCardNumber(card.getCardNumber());
         transactionDTO.setBalance(card.getBalance());
-        transactionDTO.setTransactionType(TransactionType.TRANSFER);
+        transactionDTO.setTransactionType(TransactionType.PAYMENT);
         return transactionDTO;
     }
 

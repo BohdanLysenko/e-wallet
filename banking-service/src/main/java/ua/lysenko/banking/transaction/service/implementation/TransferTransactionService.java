@@ -42,7 +42,7 @@ public class TransferTransactionService implements TransactionService {
             transferTransaction.setSuccessful(true);
             transferTransaction = transferTransactionRepository.save(transferTransaction);
         }
-        transactionDTO = transferTransactionMapper.toTransactionDTO(transferTransaction);
+        transactionDTO = transferTransactionMapper.updateTransactionDTO(transferTransaction, transactionDTO);
         transactionDTO.setCardNumber(card.getCardNumber());
         transactionDTO.setDestinationCardNumber(transactionDTO.getDestinationCardNumber());
         transactionDTO.setBalance(card.getBalance());
