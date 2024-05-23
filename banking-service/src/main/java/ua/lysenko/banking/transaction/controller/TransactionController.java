@@ -5,6 +5,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.lysenko.banking.transaction.DTO.TransactionDTO;
+import ua.lysenko.banking.transaction.models.CreatePaymentTransactionRequestModel;
+import ua.lysenko.banking.transaction.models.CreateTransferTransactionRequestModel;
 import ua.lysenko.banking.transaction.service.TransactionServiceContext;
 import ua.lysenko.banking.transaction.enums.TransactionType;
 import ua.lysenko.banking.transaction.models.CreateTransactionRequestModel;
@@ -41,6 +43,28 @@ public class TransactionController {
         TransactionResponseModel response = transactionContextMapper.toTransactionResponseModel(
                 transactionContext.processTransaction(authorizationHeader,
                         transactionDTO, TransactionType.WITHDRAWAL));
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PostMapping(value = "/transfer", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TransactionResponseModel> transfer(@RequestHeader("Authorization") String authorizationHeader,
+                                                             @RequestBody
+                                                             CreateTransferTransactionRequestModel request) {
+        TransactionDTO transactionDTO = transactionContextMapper.toTransactionDTO(request);
+        TransactionResponseModel response = transactionContextMapper.toTransactionResponseModel(
+                transactionContext.processTransaction(authorizationHeader,
+                        transactionDTO, TransactionType.TRANSFER));
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PostMapping(value = "/payment", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TransactionResponseModel> pay(@RequestHeader("Authorization") String authorizationHeader,
+                                                        @RequestBody
+                                                        CreatePaymentTransactionRequestModel request) {
+        TransactionDTO transactionDTO = transactionContextMapper.toTransactionDTO(request);
+        TransactionResponseModel response = transactionContextMapper.toTransactionResponseModel(
+                transactionContext.processTransaction(authorizationHeader,
+                        transactionDTO, TransactionType.PAYMENT));
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

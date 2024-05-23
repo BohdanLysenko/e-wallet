@@ -24,9 +24,9 @@ public class TransactionResponseModel {
     private String transactionType;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public String getDestinationCardNumber() {
-        return destinationCardNumber;
-    }
+    private Long merchantId;
+
+
 
 
 }

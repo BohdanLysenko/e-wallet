@@ -14,9 +14,8 @@ import java.math.BigDecimal;
 public class CreateTransactionRequestModel {
     @NotNull(message = "amount should not be null")
     @Positive(message = "amount should be a positive number")
-    private BigDecimal amount;
+    protected BigDecimal amount;
 
     @NotNull(message = "cardId should be provided")
-    private Long cardNumber;
-    private String destinationCardNumber;
+    protected Long cardNumber;
 }
