@@ -5,6 +5,7 @@ spring:
     import: optional:configserver:http://localhost:9297
   application:
     name: gateway-service
+
   cloud:
     gateway:
       discovery:
@@ -34,6 +35,11 @@ spring:
           predicates:
             - Method=POST
             - Path=/auth/signup
+        - id: users-sign-in
+          uri: ${USERS_ROUTE_URI:http://localhost:8081}
+          predicates:
+            - Method=POST
+            - Path=/auth/signin
         - id: users-get-user-by-id
           uri: ${USERS_ROUTE_URI:http://localhost:8081}
           predicates:

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ua.lysenko.banking.card.service.CardService;
 import ua.lysenko.banking.entity.Card;
+import ua.lysenko.banking.entity.DepositTransaction;
 import ua.lysenko.banking.entity.WithdrawalTransaction;
 import ua.lysenko.banking.transaction.DTO.TransactionDTO;
 import ua.lysenko.banking.transaction.enums.TransactionType;
@@ -39,22 +40,31 @@ public class WithdrawalTransactionService implements TransactionService {
     @Override
     public TransactionDTO processTransaction(TransactionDTO transactionDTO) {
         Card card = cardService.getByCardNumber(transactionDTO.getCardNumber());
-        WithdrawalTransaction withdrawalTransaction = WithdrawalTransaction.builder()
+        WithdrawalTransaction withdrawalTransaction = buildWithdrawalTransaction(transactionDTO, card);
+        if (!withdrawalTransaction.isSuccessful()) {
+            withdrawalTransactionRepository.save(withdrawalTransaction);
+        } else {
+            boolean isWithdrawalPerformed = cardService.withdraw(transactionDTO.getAmount(), card.getId());
+
+            withdrawalTransaction.setSuccessful(isWithdrawalPerformed);
+            withdrawalTransaction = withdrawalTransactionRepository.save(withdrawalTransaction);
+        }
+        transactionDTO = withdrawalTransactionMapper.toTransactionDTO(withdrawalTransaction);
+
+        transactionDTO.setCardNumber(card.getCardNumber());
+        transactionDTO.setBalance(card.getBalance());
+        transactionDTO.setTransactionType(TransactionType.WITHDRAWAL);
+        return transactionDTO;
+    }
+
+    private static WithdrawalTransaction buildWithdrawalTransaction(TransactionDTO transactionDTO, Card card) {
+        return WithdrawalTransaction.builder()
                 .transactionUUID(UUID.randomUUID())
                 .amount(transactionDTO.getAmount())
                 .cardId(card.getId())
-                .isSuspicious(false)
+                .isSuspicious(transactionDTO.isSuspicious())
+                .isSuccessful(transactionDTO.isSuccessful())
                 .build();
-
-        boolean isWithdrawalPerformed = cardService.withdraw(transactionDTO.getAmount(), card.getId());
-
-        withdrawalTransaction.setSuccessful(isWithdrawalPerformed);
-        withdrawalTransaction = withdrawalTransactionRepository.save(withdrawalTransaction);
-        transactionDTO = withdrawalTransactionMapper.toTransactionDTO(withdrawalTransaction);
-        transactionDTO.setCardNumber(card.getCardNumber());
-        transactionDTO.setTransactionType(TransactionType.WITHDRAWAL);
-        transactionDTO.setBalance(card.getBalance());
-        return transactionDTO;
     }
 
     @Override

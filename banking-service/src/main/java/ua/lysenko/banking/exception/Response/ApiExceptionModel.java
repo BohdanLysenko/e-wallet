@@ -13,6 +13,7 @@ public class ApiExceptionModel {
     private String message;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String error;
+    private Integer statusCode;
 
 }
 

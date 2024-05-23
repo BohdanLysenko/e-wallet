@@ -1,8 +1,8 @@
 package ua.lysenko.userserivce.service.implementation;
 
-import common.grpc.Users.GetWalletByUserIdRequest;
-import common.grpc.Users.WalletResponse;
-import common.grpc.Users.WalletServiceGrpc;
+import common.grpc.users.GetWalletByUserIdRequest;
+import common.grpc.users.WalletResponse;
+import common.grpc.users.WalletServiceGrpc;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -78,5 +78,23 @@ public class UserServiceImpl implements UserService {
         };
     }
 
+    @Override
+    public void updateUserSuspiciousActivity(Long userId) {
+        User user = getUserById(userId);
+        user.setSuspiciousActivityDetected(true);
+        usersRepository.save(user);
+    }
 
+    @Override
+    public void disableUser(Long userId) {
+        User user = getUserById(userId);
+        user.setTransactionBlocked(true);
+        usersRepository.save(user);
+    }
+    @Override
+    public void enableUser(Long userId) {
+        User user = getUserById(userId);
+        user.setEnabled(true);
+        usersRepository.save(user);
+    }
 }

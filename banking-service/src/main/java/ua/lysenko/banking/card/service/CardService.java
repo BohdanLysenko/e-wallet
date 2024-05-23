@@ -13,8 +13,12 @@ public interface CardService {
 
     Card getByCardNumber(String cardNumber);
 
+    Long getIdByCardNumber(String cardNumber);
+
     Card getById(Long id);
 
     boolean deposit(BigDecimal amount, Long cardId);
     boolean withdraw(BigDecimal amount, Long cardId);
+
+    boolean isBalanceExceeded(BigDecimal amount, Long cardId);
 }

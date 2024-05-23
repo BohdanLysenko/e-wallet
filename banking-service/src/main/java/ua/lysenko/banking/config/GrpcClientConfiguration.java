@@ -1,6 +1,6 @@
 package ua.lysenko.banking.config;
 
-import common.grpc.Users.UserServiceGrpc;
+import common.grpc.users.UserServiceGrpc;
 import io.grpc.Channel;
 import io.grpc.ManagedChannelBuilder;
 import org.springframework.context.annotation.Bean;

@@ -22,11 +22,11 @@ public class AuthenticationController {
 
     @PostMapping("/signup")
     public ResponseEntity<SignUpResponse> signup(@RequestBody SignUpRequest request) {
-        return ResponseEntity.ok(authenticationService.signup(request));
+        return ResponseEntity.ok(authenticationService.signUp(request));
     }
 
     @PostMapping("/signin")
     public ResponseEntity<SignInResponse> signin(@RequestBody SignInRequest request) {
-        return ResponseEntity.ok(authenticationService.signin(request));
+        return ResponseEntity.ok(authenticationService.signIn(request));
     }
 }

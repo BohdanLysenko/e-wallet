@@ -6,7 +6,7 @@ import ua.lysenko.userserivce.ui.models.SignUpRequest;
 import ua.lysenko.userserivce.ui.models.SignInRequest;
 
 public interface AuthenticationService {
-    SignUpResponse signup(SignUpRequest request);
+    SignUpResponse signUp(SignUpRequest request);
 
-    SignInResponse signin(SignInRequest request);
+    SignInResponse signIn(SignInRequest request);
 }

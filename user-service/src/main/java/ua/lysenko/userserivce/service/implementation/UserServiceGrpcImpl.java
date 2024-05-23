@@ -1,9 +1,7 @@
 package ua.lysenko.userserivce.service.implementation;
 
-import common.grpc.Users.UserDetailsMessage;
-import common.grpc.Users.UserMessage;
-import common.grpc.Users.UserServiceGrpc;
-import common.grpc.Users.UserTokenRequest;
+import com.google.protobuf.Empty;
+import common.grpc.users.*;
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 import ua.lysenko.userserivce.entity.User;
@@ -32,16 +30,31 @@ public class UserServiceGrpcImpl extends UserServiceGrpc.UserServiceImplBase {
                     .newBuilder().setResp(UserMessage
                             .newBuilder()
                             .setEmail(user.getEmail())
-                            .setEnabled(user.isEnabled())
+                            .setTransactionBlocked(user.isTransactionBlocked())
                             .setId(user.getId())
                             .setRole(user.getRole().name())
                             .setFirstName(user.getFirstName())
                             .setLastName(user.getLastName())
+                            .setSuspiciousActivityDetected(user.isSuspiciousActivityDetected())
                             .build())
                     .build();
             responseObserver.onNext(userDetailsResponse);
             responseObserver.onCompleted();
         }
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void updateUserSuspiciousActivity(UserSuspiciousRequest request, StreamObserver<Empty> responseObserver) {
+        userService.updateUserSuspiciousActivity(request.getId());
+        responseObserver.onNext(Empty.getDefaultInstance());
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void updateUserTransactionBlocked(UserDisabledRequest request, StreamObserver<Empty> responseObserver) {
+        userService.disableUser(request.getId());
+        responseObserver.onNext(Empty.getDefaultInstance());
         responseObserver.onCompleted();
     }
 }

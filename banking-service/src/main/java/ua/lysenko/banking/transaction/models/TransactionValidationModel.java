@@ -9,15 +9,18 @@ import java.math.BigDecimal;
 @Data
 @Builder
 public class TransactionValidationModel {
+
+    private boolean isUserTransactionBlocked;
+    private boolean isSuspiciousActivityDetected;
     private String cardNumber;
     private String destinationCardNumber;
     private TransactionType transactionType;
 
     private Long requestUserId;
     private Long persistUserId;
-    BigDecimal amount;
+    private BigDecimal amount;
 
-    String errorMsg;
+    private String errorMsg;
 
 
 }

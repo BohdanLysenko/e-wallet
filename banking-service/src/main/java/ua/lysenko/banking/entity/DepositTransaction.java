@@ -17,4 +17,5 @@ import org.hibernate.envers.Audited;
 public class DepositTransaction extends Transaction {
     public DepositTransaction() {
     }
+
 }

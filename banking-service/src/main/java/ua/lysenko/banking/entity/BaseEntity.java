@@ -12,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Getter
@@ -23,14 +24,14 @@ public class BaseEntity {
 
     @CreatedDate
     @Column(name = "created_date", updatable = false)
-    private Date createdDate;
+    private Instant createdDate;
     @CreatedBy
     @Column(name = "created_by", updatable = false)
     private String createdBy;
 
     @LastModifiedDate
     @Column(name = "last_modified_date")
-    private Date lastModifiedDate;
+    private Instant lastModifiedDate;
 
     @LastModifiedBy
     @Column(name = "last_modified_by")

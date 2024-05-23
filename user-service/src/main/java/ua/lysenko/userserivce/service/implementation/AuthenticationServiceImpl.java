@@ -1,12 +1,8 @@
 package ua.lysenko.userserivce.service.implementation;
 
-import common.grpc.Users.CreateWalletRequest;
-import common.grpc.Users.WalletResponse;
-import common.grpc.Users.WalletServiceGrpc;
-import lombok.RequiredArgsConstructor;
+import common.grpc.users.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -17,8 +13,10 @@ import ua.lysenko.userserivce.exceptions.userexceptions.InvalidPasswordException
 import ua.lysenko.userserivce.repository.UsersRepository;
 import ua.lysenko.userserivce.service.AuthenticationService;
 import ua.lysenko.userserivce.service.JwtService;
+import ua.lysenko.userserivce.service.UserService;
 import ua.lysenko.userserivce.shared.PasswordUtils;
 import ua.lysenko.userserivce.textresources.ExceptionKeys;
+import ua.lysenko.userserivce.textresources.TextResources;
 import ua.lysenko.userserivce.ui.models.SignInRequest;
 import ua.lysenko.userserivce.ui.models.SignInResponse;
 import ua.lysenko.userserivce.ui.models.SignUpRequest;
@@ -29,29 +27,48 @@ import ua.lysenko.userserivce.validators.SignUpPasswordValidator;
 import static ua.lysenko.userserivce.textresources.ExceptionKeys.EMAIL_IS_NOT_UNIQUE;
 
 @Service
-@RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UsersRepository usersRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    @Autowired
     private final WalletServiceGrpc.WalletServiceBlockingStub walletServiceBlockingStub;
 
     private final SignUpPasswordValidator signUpPasswordValidator;
     private final SignUpEmailValidator signUpEmailValidator;
 
+    private final UserService userService;
+
     Logger logger = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 
+    public AuthenticationServiceImpl(UsersRepository usersRepository,
+                                     JwtService jwtService,
+                                     AuthenticationManager authenticationManager,
+                                     WalletServiceGrpc.WalletServiceBlockingStub walletServiceBlockingStub,
+                                     SignUpPasswordValidator signUpPasswordValidator,
+                                     SignUpEmailValidator signUpEmailValidator,
+                                     UserService userService) {
+        this.usersRepository = usersRepository;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
+        this.walletServiceBlockingStub = walletServiceBlockingStub;
+        this.signUpPasswordValidator = signUpPasswordValidator;
+        this.signUpEmailValidator = signUpEmailValidator;
+        this.userService = userService;
+    }
+
     @Override
-    public SignUpResponse signup(SignUpRequest request) {
+    public SignUpResponse signUp(SignUpRequest request) {
         if (!signUpEmailValidator.isValid(request)) {
             throw new NonUniqueEmailException(EMAIL_IS_NOT_UNIQUE.getMessage());
         }
         if (!signUpPasswordValidator.isValid(request)) {
-            logger.error("Invalid password upon signup for user: " + request.getEmail());
+            logger.error(String.format(
+                            ExceptionKeys.INVALID_PASSWORD_PATTERN.getMessage()),
+                    request.getEmail());
             throw new InvalidPasswordException(ExceptionKeys.PASSWORD_IS_INVALID.getMessage());
         }
+        checkWalletServiceAvailability();
         User user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -75,16 +92,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
     @Override
-    public SignInResponse signin(SignInRequest request) {
+    public SignInResponse signIn(SignInRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        //ToDo
-        User user = usersRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+        User user = userService.getUserByEmail(request.getEmail());
         String jwt = jwtService.generateToken(user);
         return SignInResponse.builder()
                 .token(jwt)
+                .message(TextResources.LOGIN_SUCCESSFUL.getMessage())
                 .build();
+    }
+
+    private void checkWalletServiceAvailability() {
+        HealthCheckRequest healthCheckRequest = HealthCheckRequest.newBuilder()
+                .build();
+        HealthCheckResponse response = walletServiceBlockingStub.check(healthCheckRequest);
     }
 
     private String createUserWallet(User user) {

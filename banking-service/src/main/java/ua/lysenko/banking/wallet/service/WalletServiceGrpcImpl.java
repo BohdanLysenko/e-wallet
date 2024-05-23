@@ -1,6 +1,6 @@
 package ua.lysenko.banking.wallet.service;
 
-import common.grpc.Users.*;
+import common.grpc.users.*;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import org.lognet.springboot.grpc.GRpcService;
@@ -44,6 +44,15 @@ public class WalletServiceGrpcImpl extends WalletServiceGrpc.WalletServiceImplBa
                         .build()
                 ).build();
         responseObserver.onNext(getWalletByUserIdResponse);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void check(HealthCheckRequest request, StreamObserver<HealthCheckResponse> responseObserver) {
+        HealthCheckResponse response = HealthCheckResponse.newBuilder()
+                .setHealthy(true)
+                .build();
+        responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
 }

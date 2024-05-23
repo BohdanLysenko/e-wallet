@@ -1,21 +1,21 @@
 package ua.lysenko.banking.card.service;
 
-import common.grpc.Users.UserMessage;
-import common.grpc.Users.UserServiceGrpc;
-import common.grpc.Users.UserTokenRequest;
+import common.grpc.users.UserMessage;
+import common.grpc.users.UserServiceGrpc;
+import common.grpc.users.UserTokenRequest;
 import jakarta.transaction.Transactional;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.stereotype.Service;
 import ua.lysenko.banking.card.DTO.CardDTO;
 import ua.lysenko.banking.card.models.CreateCardResponseModel;
 import ua.lysenko.banking.card.repository.CardRepository;
 import ua.lysenko.banking.entity.Card;
 import ua.lysenko.banking.entity.Wallet;
-import ua.lysenko.banking.exception.AccountIsLockedException;
 import ua.lysenko.banking.exception.CardNotFoundException;
 import ua.lysenko.banking.exception.InsufficientCardBalanceException;
 import ua.lysenko.banking.utils.Mappers.CardMapper;
 import ua.lysenko.banking.utils.textresources.ExceptionKeys;
-import ua.lysenko.banking.utils.validators.UserDetailsResponseValidator;
+import ua.lysenko.banking.utils.validators.UserNotLockedValidator;
 import ua.lysenko.banking.wallet.service.WalletService;
 
 import java.math.BigDecimal;
@@ -31,7 +31,7 @@ public class CardServiceImpl implements CardService {
     private final CardRepository cardRepository;
 
     // Todo @Qualifier
-    private final UserDetailsResponseValidator userDetailsResponseValidator;
+    private final UserNotLockedValidator userDetailsResponseValidator;
 
     private final WalletService walletService;
 
@@ -39,7 +39,7 @@ public class CardServiceImpl implements CardService {
 
     public CardServiceImpl(UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub,
                            CardRepository cardRepository,
-                           UserDetailsResponseValidator userDetailsResponseValidator,
+                           UserNotLockedValidator userDetailsResponseValidator,
                            WalletService walletService, CardMapper cardMapper) {
         this.userServiceBlockingStub = userServiceBlockingStub;
         this.cardRepository = cardRepository;
@@ -51,9 +51,6 @@ public class CardServiceImpl implements CardService {
 
     public CreateCardResponseModel createCard(String token) {
         UserMessage user = getCurrentUser(token);
-        if (!userDetailsResponseValidator.isValid(user)) {
-            throw new AccountIsLockedException(ExceptionKeys.ACCOUNT_IS_LOCKED.getMessage());
-        }
         CardDTO cardDTO = createCardByUserId(user.getId());
         CreateCardResponseModel createdCard = cardMapper.toCreateCardResponseModel(cardDTO);
         createdCard.setCardHolderName(user.getFirstName());
@@ -85,6 +82,13 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
+    public Long getIdByCardNumber(String cardNumber) {
+        return cardRepository.findIdByCardNumberAndActiveIsTrue(cardNumber).orElseThrow(
+                () -> new CardNotFoundException(
+                        String.format(ExceptionKeys.CARD_NUMBER_NOT_FOUND.getMessage(), cardNumber)));
+    }
+
+    @Override
     public Card getById(Long id) {
         return cardRepository.findByIdAndActiveIsTrue(id).orElseThrow(
                 () -> new CardNotFoundException(
@@ -102,14 +106,16 @@ public class CardServiceImpl implements CardService {
     @Override
     public boolean withdraw(BigDecimal amount, Long cardId) {
         Card card = getById(cardId);
-        if (card.getBalance().compareTo(amount) >= 0) {
-            card.setBalance(card.getBalance().subtract(amount));
-            cardRepository.save(card);
-            return true;
-        }
-        throw new InsufficientCardBalanceException(
-                String.format(ExceptionKeys.INSUFFICIENT_CARD_BALANCE_EXCEPTION.getMessage(), amount,
-                        card.getBalance()));
+        card.setBalance(card.getBalance().subtract(amount));
+        cardRepository.save(card);
+        return true;
+
+    }
+
+    @Override
+    public boolean isBalanceExceeded(BigDecimal amount, Long cardId) {
+        Card card = getById(cardId);
+        return amount.compareTo(card.getBalance()) > 0;
     }
 
     private long getCurrentUserId(String token) {
@@ -125,13 +131,12 @@ public class CardServiceImpl implements CardService {
     }
 
 
-    // ToDo
     private static Date calculateExpirationDate() {
         Date currentDate = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
         calendar.add(Calendar.YEAR, 3);
-        return calendar.getTime();
+        return DateUtils.truncate(calendar.getTime(), java.util.Calendar.DAY_OF_MONTH);
     }
 
     public static String generateCardNumber() {

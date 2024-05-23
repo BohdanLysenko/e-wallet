@@ -11,4 +11,4 @@ spring:
           uri: https://github.com/BohdanLysenko/BankServiceConfig.git
           clone-on-start: true
           username: BohdanLysenko
-          password: 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
+          password: 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

@@ -10,6 +10,6 @@ import java.math.BigDecimal;
 @Builder
 public class TransactionValidationResult {
 
-    boolean isValid;
-    boolean isSuspicious;
+    private boolean isValid;
+    private boolean isSuspicious;
 }

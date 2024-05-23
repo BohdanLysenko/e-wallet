@@ -1,7 +1,6 @@
 package ua.lysenko.userserivce.configs;
 
-import common.grpc.Transactions.TransactionServiceGrpc;
-import common.grpc.Users.WalletServiceGrpc;
+import common.grpc.users.WalletServiceGrpc;
 import io.grpc.Channel;
 import io.grpc.ManagedChannelBuilder;
 import org.springframework.context.annotation.Bean;

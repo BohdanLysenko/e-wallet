@@ -8,6 +8,7 @@ import ua.lysenko.userserivce.ui.models.SignUpRequest;
 public interface UserService {
 
     User getUserByEmail(String email);
+
     User getUserById(Long id);
 
     UserDTO getUserDetailsById(Long id, String token);
@@ -15,4 +16,9 @@ public interface UserService {
     UserDTO updateUserAdminRole(String userId);
 
     UserDetailsService userDetailsService();
+
+    void updateUserSuspiciousActivity(Long userId);
+    void disableUser(Long userId);
+
+    void enableUser(Long userId);
 }

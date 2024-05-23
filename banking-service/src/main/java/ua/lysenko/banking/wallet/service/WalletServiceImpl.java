@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ua.lysenko.banking.entity.Wallet;
-import ua.lysenko.banking.utils.MapperUtils;
 import ua.lysenko.banking.utils.Mappers.WalletMapper;
 import ua.lysenko.banking.wallet.dto.WalletDTO;
 import ua.lysenko.banking.wallet.repository.WalletRepository;
@@ -44,6 +43,6 @@ public class WalletServiceImpl implements WalletService {
     // ToDo expection message handler
     @Override
     public Wallet getWalletByUserId(Long userId) {
-        return walletRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException("no such user"));
+        return walletRepository.findByUserId(userId).orElseThrow(() -> new EntityNotFoundException("no such wallet"));
     }
 }

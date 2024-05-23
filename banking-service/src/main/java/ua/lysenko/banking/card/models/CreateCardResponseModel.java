@@ -1,5 +1,6 @@
 package ua.lysenko.banking.card.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +16,7 @@ import java.util.Date;
 public class CreateCardResponseModel {
     private String cardNumber;
     private BigDecimal balance;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date expirationDate;
 
     private int cvv;

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Date;
 
 @Data
@@ -14,10 +15,9 @@ import java.util.Date;
 @AllArgsConstructor
 public class TransactionResponseModel {
     private String transactionUUID;
-    private BigDecimal balance;
     private BigDecimal amount;
     private boolean isSuccessful;
-    private Date createdDate;
+    private Instant createdDate;
     private String cardNumber;
     @JsonIgnoreProperties
     private String destinationCardNumber;

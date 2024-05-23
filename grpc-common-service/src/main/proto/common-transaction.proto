@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package common.grpc.Transactions;
+package common.grpc.transactions;
 
 option java_multiple_files = true;
 
