@@ -1,13 +1,15 @@
 package ua.lysenko.userserivce.service.implementation;
 
+import com.google.protobuf.Empty;
+import common.grpc.users.AllWalletsResponse;
 import common.grpc.users.GetWalletByUserIdRequest;
 import common.grpc.users.WalletResponse;
 import common.grpc.users.WalletServiceGrpc;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import ua.lysenko.userserivce.textresources.ExceptionKeys;
 import ua.lysenko.userserivce.dto.UserDTO;
 import ua.lysenko.userserivce.entity.Role;
 import ua.lysenko.userserivce.entity.User;
@@ -15,6 +17,9 @@ import ua.lysenko.userserivce.exceptions.userexceptions.UserNotFoundException;
 import ua.lysenko.userserivce.repository.UsersRepository;
 import ua.lysenko.userserivce.service.UserService;
 import ua.lysenko.userserivce.shared.MapperUtils;
+import ua.lysenko.userserivce.textresources.ExceptionKeys;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -54,8 +59,24 @@ public class UserServiceImpl implements UserService {
             userDTO.setWalletNumber(response.getResp().getWalletNumber());
             return userDTO;
         } else {
-            throw new UserNotFoundException(ExceptionKeys.NO_ACCESS_TO_THE_CONTENT.toString());
+            throw new UserNotFoundException(ExceptionKeys.NO_ACCESS_TO_THE_CONTENT.getMessage().toString());
         }
+    }
+
+    @Override
+    public List<UserDTO> getAllUsers(Pageable pageable) {
+        List<UserDTO> users = usersRepository.findAll(pageable)
+                .stream()
+                .map(user -> MapperUtils.map(user, UserDTO.class))
+                .toList();
+        AllWalletsResponse response = walletServiceBlockingStub.getAllWallets(Empty.getDefaultInstance());
+        for (UserDTO user : users) {
+            response.getWalletsList().stream()
+                    .filter(wallet -> wallet.getUserId() == user.getId())
+                    .findFirst()
+                    .ifPresent(wallet -> user.setWalletNumber(wallet.getWalletNumber()));
+        }
+        return users;
     }
 
     @Override
@@ -86,15 +107,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void disableUser(Long userId) {
+    public void blockUserById(Long userId) {
         User user = getUserById(userId);
         user.setTransactionBlocked(true);
         usersRepository.save(user);
     }
+
     @Override
-    public void enableUser(Long userId) {
+    public void unblockUserById(Long userId) {
         User user = getUserById(userId);
-        user.setEnabled(true);
+        user.setTransactionBlocked(false);
         usersRepository.save(user);
     }
 }

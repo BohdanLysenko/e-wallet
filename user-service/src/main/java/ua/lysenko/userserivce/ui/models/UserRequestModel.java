@@ -1,11 +1,10 @@
 package ua.lysenko.userserivce.ui.models;
 
 import jakarta.validation.constraints.Email;
-import lombok.Getter;
-import lombok.Setter;
-
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

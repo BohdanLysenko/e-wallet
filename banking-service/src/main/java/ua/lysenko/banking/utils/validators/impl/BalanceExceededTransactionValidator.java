@@ -3,7 +3,6 @@ package ua.lysenko.banking.utils.validators.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ua.lysenko.banking.card.service.CardService;
-import ua.lysenko.banking.entity.Card;
 import ua.lysenko.banking.exception.InsufficientCardBalanceException;
 import ua.lysenko.banking.transaction.enums.TransactionType;
 import ua.lysenko.banking.transaction.models.TransactionValidationModel;

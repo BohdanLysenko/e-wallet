@@ -3,8 +3,8 @@ package ua.lysenko.banking.transaction.conf;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ua.lysenko.banking.transaction.service.TransactionService;
 import ua.lysenko.banking.transaction.enums.TransactionType;
+import ua.lysenko.banking.transaction.service.TransactionService;
 
 import java.util.EnumMap;
 import java.util.List;

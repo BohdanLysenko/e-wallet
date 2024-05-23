@@ -1,16 +1,17 @@
 package ua.lysenko.banking.transaction.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.lysenko.banking.transaction.DTO.TransactionDTO;
-import ua.lysenko.banking.transaction.models.CreatePaymentTransactionRequestModel;
-import ua.lysenko.banking.transaction.models.CreateTransferTransactionRequestModel;
-import ua.lysenko.banking.transaction.service.TransactionServiceContext;
 import ua.lysenko.banking.transaction.enums.TransactionType;
+import ua.lysenko.banking.transaction.models.CreatePaymentTransactionRequestModel;
 import ua.lysenko.banking.transaction.models.CreateTransactionRequestModel;
+import ua.lysenko.banking.transaction.models.CreateTransferTransactionRequestModel;
 import ua.lysenko.banking.transaction.models.TransactionResponseModel;
+import ua.lysenko.banking.transaction.service.TransactionServiceContext;
 import ua.lysenko.banking.utils.Mappers.TransactionContextMapper;
 import ua.lysenko.banking.utils.Mappers.TransactionControllerMapper;
 
@@ -31,7 +32,8 @@ public class TransactionController {
 
     @PostMapping(value = "/deposit", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TransactionResponseModel> deposit(@RequestHeader("Authorization") String authorizationHeader,
-                                                            @RequestBody CreateTransactionRequestModel request) {
+                                                            @RequestBody @Valid
+                                                            CreateTransactionRequestModel request) {
         TransactionDTO transactionDTO = transactionControllerMapper.toTransactionDTO(request);
         TransactionResponseModel response = transactionContextMapper.toTransactionResponseModel(
                 transactionContext.processTransaction(authorizationHeader,
@@ -41,7 +43,8 @@ public class TransactionController {
 
     @PostMapping(value = "/withdraw", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TransactionResponseModel> withdraw(@RequestHeader("Authorization") String authorizationHeader,
-                                                             @RequestBody CreateTransactionRequestModel request) {
+                                                             @RequestBody @Valid
+                                                             CreateTransactionRequestModel request) {
         TransactionDTO transactionDTO = transactionControllerMapper.toTransactionDTO(request);
         TransactionResponseModel response = transactionContextMapper.toTransactionResponseModel(
                 transactionContext.processTransaction(authorizationHeader,
@@ -51,7 +54,7 @@ public class TransactionController {
 
     @PostMapping(value = "/transfer", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TransactionResponseModel> transfer(@RequestHeader("Authorization") String authorizationHeader,
-                                                             @RequestBody
+                                                             @RequestBody @Valid
                                                              CreateTransferTransactionRequestModel request) {
         TransactionDTO transactionDTO = transactionControllerMapper.toTransactionDTO(request);
         TransactionResponseModel response = transactionContextMapper.toTransactionResponseModel(
@@ -62,7 +65,7 @@ public class TransactionController {
 
     @PostMapping(value = "/payment", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TransactionResponseModel> pay(@RequestHeader("Authorization") String authorizationHeader,
-                                                        @RequestBody
+                                                        @RequestBody @Valid
                                                         CreatePaymentTransactionRequestModel request) {
         TransactionDTO transactionDTO = transactionControllerMapper.toTransactionDTO(request);
         TransactionResponseModel response = transactionContextMapper.toTransactionResponseModel(

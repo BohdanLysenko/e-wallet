@@ -12,7 +12,6 @@ import ua.lysenko.banking.card.repository.CardRepository;
 import ua.lysenko.banking.entity.Card;
 import ua.lysenko.banking.entity.Wallet;
 import ua.lysenko.banking.exception.CardNotFoundException;
-import ua.lysenko.banking.exception.InsufficientCardBalanceException;
 import ua.lysenko.banking.utils.Mappers.CardMapper;
 import ua.lysenko.banking.utils.textresources.ExceptionKeys;
 import ua.lysenko.banking.utils.validators.UserNotLockedValidator;

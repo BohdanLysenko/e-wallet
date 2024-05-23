@@ -53,7 +53,7 @@ public class UserServiceGrpcImpl extends UserServiceGrpc.UserServiceImplBase {
 
     @Override
     public void updateUserTransactionBlocked(UserDisabledRequest request, StreamObserver<Empty> responseObserver) {
-        userService.disableUser(request.getId());
+        userService.blockUserById(request.getId());
         responseObserver.onNext(Empty.getDefaultInstance());
         responseObserver.onCompleted();
     }

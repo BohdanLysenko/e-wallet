@@ -12,9 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ua.lysenko.userserivce.textresources.ExceptionKeys;
 import ua.lysenko.userserivce.exceptions.Responses.ApiExceptionModel;
 import ua.lysenko.userserivce.shared.Utils;
+import ua.lysenko.userserivce.textresources.ExceptionKeys;
 
 import java.io.IOException;
 

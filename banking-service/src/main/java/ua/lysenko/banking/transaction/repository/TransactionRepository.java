@@ -3,11 +3,7 @@ package ua.lysenko.banking.transaction.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ua.lysenko.banking.entity.DepositTransaction;
 import ua.lysenko.banking.entity.Transaction;
-
-import java.math.BigDecimal;
-import java.util.Optional;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 

@@ -1,9 +1,7 @@
 package ua.lysenko.banking.utils.validators.impl;
 
-import common.grpc.users.UserDisabledRequest;
 import common.grpc.users.UserServiceGrpc;
 import common.grpc.users.UserSuspiciousRequest;
-import common.grpc.users.UserTokenRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

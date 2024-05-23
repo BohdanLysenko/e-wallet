@@ -7,9 +7,9 @@ import ua.lysenko.banking.card.service.CardService;
 import ua.lysenko.banking.entity.Card;
 import ua.lysenko.banking.entity.DepositTransaction;
 import ua.lysenko.banking.transaction.DTO.TransactionDTO;
+import ua.lysenko.banking.transaction.enums.TransactionType;
 import ua.lysenko.banking.transaction.repository.DepositTransactionRepository;
 import ua.lysenko.banking.transaction.service.TransactionService;
-import ua.lysenko.banking.transaction.enums.TransactionType;
 import ua.lysenko.banking.utils.Mappers.DepositTransactionMapper;
 
 import java.util.UUID;

@@ -3,7 +3,6 @@ package ua.lysenko.banking.utils.validators.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ua.lysenko.banking.exception.TransactionUnauthorizedException;
-import ua.lysenko.banking.transaction.enums.TransactionType;
 import ua.lysenko.banking.transaction.models.TransactionValidationModel;
 import ua.lysenko.banking.transaction.models.TransactionValidationResult;
 import ua.lysenko.banking.utils.textresources.ExceptionKeys;

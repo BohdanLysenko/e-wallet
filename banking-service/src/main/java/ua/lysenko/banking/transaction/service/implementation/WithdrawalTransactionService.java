@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ua.lysenko.banking.card.service.CardService;
 import ua.lysenko.banking.entity.Card;
-import ua.lysenko.banking.entity.DepositTransaction;
 import ua.lysenko.banking.entity.WithdrawalTransaction;
 import ua.lysenko.banking.transaction.DTO.TransactionDTO;
 import ua.lysenko.banking.transaction.enums.TransactionType;

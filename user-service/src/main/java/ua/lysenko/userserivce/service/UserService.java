@@ -1,9 +1,11 @@
 package ua.lysenko.userserivce.service;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import ua.lysenko.userserivce.dto.UserDTO;
 import ua.lysenko.userserivce.entity.User;
-import ua.lysenko.userserivce.ui.models.SignUpRequest;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -13,12 +15,15 @@ public interface UserService {
 
     UserDTO getUserDetailsById(Long id, String token);
 
+    List<UserDTO> getAllUsers(Pageable pageable);
+
     UserDTO updateUserAdminRole(String userId);
 
     UserDetailsService userDetailsService();
 
     void updateUserSuspiciousActivity(Long userId);
-    void disableUser(Long userId);
 
-    void enableUser(Long userId);
+    void blockUserById(Long userId);
+
+    void unblockUserById(Long userId);
 }

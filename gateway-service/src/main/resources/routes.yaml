@@ -1,0 +1,54 @@
+# User Service Routes
+USERS_ROUTE_URI: http://localhost:8081
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      default-filters:
+        - PrefixPath=/api/v1
+      routes:
+        - id: sign-up
+          uri: ${USERS_ROUTE_URI}
+          predicates:
+            - Method=POST
+            - Path=/auth/signup
+        - id: sign-in
+          uri: ${USERS_ROUTE_URI}
+          predicates:
+            - Method=POST
+            - Path=/auth/signin
+        - id: get-user-by-id
+          uri: ${USERS_ROUTE_URI}
+          predicates:
+            - Method=GET
+            - Header=Authorization, Bearer (.*)
+            - Path=/users/**
+          filters:
+            - AuthorizationHeaderFilter
+        - id: update-user-role
+          uri: ${USERS_ROUTE_URI}
+          predicates:
+            - Method=PATCH
+            - Header=Authorization, Bearer (.*)
+            - Path=/users/admin
+          filters:
+            - AuthorizationHeaderFilter
+        - id: unblock-user
+          uri: ${USERS_ROUTE_URI}
+          predicates:
+            - Method=POST
+            - Header=Authorization, Bearer (.*)
+            - Path=/users/unblock/**
+          filters:
+            - AuthorizationHeaderFilter
+        - id: get-all-users
+          uri: ${USERS_ROUTE_URI}
+          predicates:
+            - Method=GET
+            - Header=Authorization, Bearer (.*)
+            - Path=/users
+          filters:
+            - AuthorizationHeaderFilter
