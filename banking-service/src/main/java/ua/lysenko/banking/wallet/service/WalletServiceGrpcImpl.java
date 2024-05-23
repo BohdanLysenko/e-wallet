@@ -10,6 +10,9 @@ import ua.lysenko.banking.wallet.dto.WalletDTO;
 
 import java.util.List;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @GRpcService
 @Slf4j
 public class WalletServiceGrpcImpl extends WalletServiceGrpc.WalletServiceImplBase {
