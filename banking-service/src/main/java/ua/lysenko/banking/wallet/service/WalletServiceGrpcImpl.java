@@ -19,7 +19,7 @@ public class WalletServiceGrpcImpl extends WalletServiceGrpc.WalletServiceImplBa
 
     private final WalletService walletService;
 
-    public WalletServiceGrpcImpl(WalletRepository walletRepository, WalletService walletService) {
+    public WalletServiceGrpcImpl(WalletService walletService) {
         this.walletService = walletService;
     }
 
@@ -28,7 +28,7 @@ public class WalletServiceGrpcImpl extends WalletServiceGrpc.WalletServiceImplBa
         WalletDTO createdWalletDTO = walletService.createWallet(request.getUserId());
         WalletResponse response = WalletResponse.newBuilder()
                 .setResp(WalletMessage.newBuilder()
-                        .setWalletId(createdWalletDTO.getId())
+                        .setId(createdWalletDTO.getId())
                         .setWalletNumber(createdWalletDTO.getWalletNumber())
                         .setUserId(createdWalletDTO.getUserId()).build())
 
@@ -43,7 +43,7 @@ public class WalletServiceGrpcImpl extends WalletServiceGrpc.WalletServiceImplBa
         WalletResponse getWalletByUserIdResponse = WalletResponse
                 .newBuilder()
                 .setResp(WalletMessage.newBuilder()
-                        .setWalletId(createdWallet.getId())
+                        .setId(createdWallet.getId())
                         .setWalletNumber(createdWallet.getWalletNumber().toString())
                         .build()
                 ).build();
@@ -64,7 +64,7 @@ public class WalletServiceGrpcImpl extends WalletServiceGrpc.WalletServiceImplBa
     public void getAllWallets(Empty request, StreamObserver<AllWalletsResponse> responseObserver) {
         List<WalletMessage> wallets = walletService.getAllWallets().stream()
                 .map(wallet -> WalletMessage.newBuilder()
-                        .setWalletId(wallet.getId())
+                        .setId(wallet.getId())
                         .setWalletNumber(wallet.getWalletNumber().toString())
                         .setUserId(wallet.getUserId())
                         .build())

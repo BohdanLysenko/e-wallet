@@ -15,8 +15,8 @@ service WalletService {
 }
 
 message WalletMessage{
-  int64 walletId = 1;
-  string walletNumber = 2;
+  int64 id = 1;
+  string wallet_number = 2;
   int64 userId = 3;
 }
 
