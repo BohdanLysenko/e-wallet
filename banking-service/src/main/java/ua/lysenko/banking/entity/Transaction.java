@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.AuditOverride;
 import org.hibernate.envers.Audited;
+import ua.lysenko.banking.transaction.enums.TransactionType;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -25,6 +26,7 @@ public class Transaction extends BaseEntity {
     private UUID transactionUUID;
 
     protected BigDecimal amount;
+
     protected boolean isSuspicious;
 
     protected Long cardId;
@@ -33,6 +35,10 @@ public class Transaction extends BaseEntity {
 
     public Transaction() {
 
+    }
+
+    public TransactionType type() {
+        return TransactionType.TRANSACTION;
     }
 
 }

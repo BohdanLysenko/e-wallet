@@ -17,6 +17,7 @@ public class TransactionSenderValidator extends AbstractTransactionValidator {
             log.warn(ExceptionKeys.TRANSACTION_UNAUTHORIZED.getMessage());
             throw new TransactionUnauthorizedException(ExceptionKeys.TRANSACTION_UNAUTHORIZED.getMessage());
         }
+        result.setRequestUserId(transaction.getRequestUserId());
         next(transaction, result);
     }
 }

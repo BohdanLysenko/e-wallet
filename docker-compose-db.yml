@@ -25,6 +25,19 @@ services:
     volumes:
       - bankingservice_data:/var/lib/postgresql/data
 
+  quartzservice_db:
+    image: postgres:latest
+    container_name: quartzservice_db_container
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: quartzservice_db
+    ports:
+      - "5436:5432"
+    volumes:
+      - quartzservice_data:/var/lib/postgresql/data
+
 volumes:
   userservice_data:
   bankingservice_data:
+  quartzservice_data:

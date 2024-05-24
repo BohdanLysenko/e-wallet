@@ -19,8 +19,4 @@ public class TransactionValidationModel {
     private Long requestUserId;
     private Long persistUserId;
     private BigDecimal amount;
-
-    private String errorMsg;
-
-
 }

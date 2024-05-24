@@ -11,7 +11,7 @@ import ua.lysenko.banking.transaction.DTO.TransactionDTO;
 import ua.lysenko.banking.transaction.enums.TransactionType;
 import ua.lysenko.banking.transaction.repository.WithdrawalTransactionRepository;
 import ua.lysenko.banking.transaction.service.TransactionService;
-import ua.lysenko.banking.utils.Mappers.WithdrawalTransactionMapper;
+import ua.lysenko.banking.utils.mappers.WithdrawalTransactionMapper;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -38,7 +38,7 @@ public class WithdrawalTransactionService implements TransactionService {
 
     @Override
     public TransactionDTO processTransaction(TransactionDTO transactionDTO) {
-        Card card = cardService.getByCardNumber(transactionDTO.getCardNumber());
+        Card card = cardService.findByCardNumber(transactionDTO.getCardNumber());
         WithdrawalTransaction withdrawalTransaction = buildWithdrawalTransaction(transactionDTO, card);
         if (!withdrawalTransaction.isSuccessful()) {
             withdrawalTransactionRepository.save(withdrawalTransaction);
@@ -48,7 +48,7 @@ public class WithdrawalTransactionService implements TransactionService {
             withdrawalTransaction.setSuccessful(isWithdrawalPerformed);
             withdrawalTransaction = withdrawalTransactionRepository.save(withdrawalTransaction);
         }
-        transactionDTO = withdrawalTransactionMapper.toTransactionDTO(withdrawalTransaction);
+        transactionDTO = withdrawalTransactionMapper.updateTransactionDTO(withdrawalTransaction,transactionDTO);
 
         transactionDTO.setCardNumber(card.getCardNumber());
         transactionDTO.setBalance(card.getBalance());

@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.AuditOverride;
 import org.hibernate.envers.Audited;
+import ua.lysenko.banking.transaction.enums.TransactionType;
 
 @DiscriminatorValue("WITHDRAWAL")
 @Entity
@@ -19,6 +20,11 @@ public class WithdrawalTransaction extends Transaction {
 
     public WithdrawalTransaction() {
 
+    }
+
+    @Override
+    public TransactionType type() {
+        return TransactionType.WITHDRAWAL;
     }
 
 }

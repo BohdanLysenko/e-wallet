@@ -7,5 +7,6 @@ spring:
     - optional:classpath:routes.yaml
   application:
     name: gateway-service
-
-BANKING_ROUTE_URI: http://localhost:8146
+  cloud:
+    config:
+      name: gateway-service

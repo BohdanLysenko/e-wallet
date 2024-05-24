@@ -1,0 +1,29 @@
+USERS_ROUTE_URI: http://localhost:8146
+DB_NAME: bankingservice_db
+DB_PORT: 5434
+DB_USERNAME: admin
+DB_PASSWORD: password
+server:
+  servlet:
+    context-path: /api/v1
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:${DB_PORT}/${DB_NAME}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+transaction:
+  limit:
+    single: 2000.00
+    suspicious: 10000.00
+    daily: 10000.00
+    amount:
+      suspicious: 5
+      blocked: 10
+withdrawal:
+  limit:
+    daily: 5000

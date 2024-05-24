@@ -1,0 +1,20 @@
+USERS_ROUTE_URI: http://localhost:8146
+DB_NAME: userservice_db
+DB_PORT: 5432
+DB_USERNAME: admin
+DB_PASSWORD: password
+token:
+  signing:
+    key: ENC(rE3HbNAQPtph/56qWq+HGnQorLwTVA2IInM5/3eSSl1lJMhHzeW/iMc091Vv8nCDwaAi3SoKdwcsKfiLbWcp+cGPNNl5EGfcJpaknqwIHlNs2ibKMiCXhpnfmhGuBu6ct4RN21jLySGZybDwgxef1Q==)
+server:
+  servlet:
+    context-path: /api/v1
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:${DB_PORT}/${DB_NAME}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update

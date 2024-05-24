@@ -13,13 +13,15 @@ public class TransactionValidatorChain {
     public TransactionValidatorChain(UserTransactionBlockedValidator userEnabledValidator,
                                      TransactionSenderValidator transactionSenderValidator,
                                      TransactionAmountLimitValidator transactionAmountLimitValidator,
+                                     IdenticalCardTransferTransactionValidator identicalCardTransferTransactionValidator,
                                      BalanceExceededTransactionValidator balanceExceededTransactionValidator,
                                      WithdrawalTransactionLimitValidator withdrawalTransactionLimitValidator,
                                      SuspiciousAmountOfTransactionsValidator suspiciousAmountOfTransactionsValidator,
                                      SuspiciousTransactionValidator suspiciousTransactionValidator,
                                      BlockedAmountOfTransactionsValidator blockedAmountOfTransactionsValidator) {
         chain = userEnabledValidator;
-        userEnabledValidator.setNext(transactionSenderValidator);
+        userEnabledValidator.setNext(identicalCardTransferTransactionValidator);
+        identicalCardTransferTransactionValidator.setNext(transactionSenderValidator);
         transactionSenderValidator.setNext(transactionAmountLimitValidator);
         transactionAmountLimitValidator.setNext(balanceExceededTransactionValidator);
         balanceExceededTransactionValidator.setNext(withdrawalTransactionLimitValidator);

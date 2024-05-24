@@ -10,6 +10,7 @@ service UserService {
   rpc GetUserDetails(UserTokenRequest) returns (UserDetailsMessage);
   rpc UpdateUserSuspiciousActivity(UserSuspiciousRequest) returns (google.protobuf.Empty);
   rpc UpdateUserTransactionBlocked(UserDisabledRequest) returns (google.protobuf.Empty);
+  rpc UnblockAllUsers(UserUnblockRequest) returns (UserUnblockResponse);
 }
 
 message UserMessage {
@@ -36,4 +37,9 @@ message UserSuspiciousRequest {
 
 message UserDisabledRequest {
   int64 id = 1;
+}
+message UserUnblockRequest {
+}
+message UserUnblockResponse {
+  bool success = 1;
 }

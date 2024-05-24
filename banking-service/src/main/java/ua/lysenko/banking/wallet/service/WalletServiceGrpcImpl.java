@@ -2,16 +2,16 @@ package ua.lysenko.banking.wallet.service;
 
 import com.google.protobuf.Empty;
 import common.grpc.users.*;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import org.lognet.springboot.grpc.GRpcService;
 import ua.lysenko.banking.entity.Wallet;
+import ua.lysenko.banking.exception.WalletNotFoundException;
 import ua.lysenko.banking.wallet.dto.WalletDTO;
 
 import java.util.List;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @GRpcService
 @Slf4j
@@ -40,7 +40,13 @@ public class WalletServiceGrpcImpl extends WalletServiceGrpc.WalletServiceImplBa
 
     @Override
     public void getWalletByUserId(GetWalletByUserIdRequest request, StreamObserver<WalletResponse> responseObserver) {
-        Wallet createdWallet = walletService.getWalletByUserId(request.getUserID());
+        Wallet createdWallet = Wallet.builder()
+                .build();
+        try {
+            createdWallet = walletService.findActiveWalletByUserId(request.getUserID());
+        } catch (WalletNotFoundException exception) {
+            responseObserver.onError(new StatusRuntimeException(Status.UNAUTHENTICATED));
+        }
         WalletResponse getWalletByUserIdResponse = WalletResponse
                 .newBuilder()
                 .setResp(WalletMessage.newBuilder()

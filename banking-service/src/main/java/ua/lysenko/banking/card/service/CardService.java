@@ -2,22 +2,27 @@ package ua.lysenko.banking.card.service;
 
 
 import ua.lysenko.banking.card.DTO.CardDTO;
-import ua.lysenko.banking.card.models.CreateCardResponseModel;
 import ua.lysenko.banking.entity.Card;
+import ua.lysenko.banking.entity.Wallet;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface CardService {
-    CreateCardResponseModel createCard(String token);
-    CardDTO createCardByUserId(Long userID);
+    CardDTO createCard(String token);
 
-    Card getByCardNumber(String cardNumber);
+    CardDTO getByCardNumber(String cardNumber);
+
+    Card findByCardNumber(String cardNumber);
 
     Long getIdByCardNumber(String cardNumber);
 
-    Card getById(Long id);
+    CardDTO getById(Long id, String token);
+
+    List<CardDTO> getAllCardsByWalletId(Wallet wallet);
 
     boolean deposit(BigDecimal amount, Long cardId);
+
     boolean withdraw(BigDecimal amount, Long cardId);
 
     boolean isBalanceExceeded(BigDecimal amount, Long cardId);

@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: bankingservice_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  config-server:
+    image: config-service:latest
+    container_name: config-service
+    ports:
+      - "9297:9297"
+
+  app:
+#    build:
+##      context: .
+##      dockerfile: Dockerfile
+    image: banking-service:latest
+    container_name: banking-service
+    ports:
+      - "8146:8146"
+    depends_on:
+      - postgres
+      - config-server
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bankingservice_db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_CLOUD_CONFIG_URI: http://config-server:9297
+
+volumes:
+  postgres_data:

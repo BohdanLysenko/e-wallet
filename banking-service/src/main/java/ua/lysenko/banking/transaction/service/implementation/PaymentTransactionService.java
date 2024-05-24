@@ -9,7 +9,7 @@ import ua.lysenko.banking.transaction.DTO.TransactionDTO;
 import ua.lysenko.banking.transaction.enums.TransactionType;
 import ua.lysenko.banking.transaction.repository.PaymentTransactionRepository;
 import ua.lysenko.banking.transaction.service.TransactionService;
-import ua.lysenko.banking.utils.Mappers.PaymentTransactionMapper;
+import ua.lysenko.banking.utils.mappers.PaymentTransactionMapper;
 
 import java.util.UUID;
 
@@ -29,8 +29,10 @@ public class PaymentTransactionService implements TransactionService {
 
     @Override
     public TransactionDTO processTransaction(TransactionDTO transactionDTO) {
-        Card card = cardService.getByCardNumber(transactionDTO.getCardNumber());
-        PaymentTransaction paymentTransaction = buildPaymentTransaction(transactionDTO, card, transactionDTO.getMerchantId());
+        Card card = cardService.findByCardNumber(transactionDTO.getCardNumber());
+        PaymentTransaction paymentTransaction = buildPaymentTransaction(transactionDTO, card,
+                transactionDTO.getMerchantId());
+
         if (!paymentTransaction.isSuccessful()) {
             paymentTransactionRepository.save(paymentTransaction);
         } else {
@@ -38,9 +40,7 @@ public class PaymentTransactionService implements TransactionService {
             paymentTransaction.setSuccessful(true);
             paymentTransaction = paymentTransactionRepository.save(paymentTransaction);
         }
-        transactionDTO = paymentTransactionMapper.toTransactionDTO(paymentTransaction);
-        transactionDTO.setCardNumber(card.getCardNumber());
-        transactionDTO.setBalance(card.getBalance());
+        transactionDTO = paymentTransactionMapper.updateTransactionDTO(paymentTransaction, transactionDTO);
         transactionDTO.setTransactionType(TransactionType.PAYMENT);
         return transactionDTO;
     }

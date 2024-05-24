@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.AuditOverride;
 import org.hibernate.envers.Audited;
+import ua.lysenko.banking.transaction.enums.TransactionType;
 
 @DiscriminatorValue("TRANSFER")
 @Entity
@@ -21,5 +22,9 @@ public class TransferTransaction extends Transaction {
 
     public TransferTransaction() {
 
+    }
+    @Override
+    public TransactionType type() {
+        return TransactionType.TRANSFER;
     }
 }

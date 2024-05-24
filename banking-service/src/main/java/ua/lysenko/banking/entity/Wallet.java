@@ -26,6 +26,9 @@ public class Wallet extends BaseEntity {
     @Column(name = "user_id", unique = true)
     private Long userId;
 
+    @Column(nullable = false, columnDefinition = "BOOLEAN NOT NULL DEFAULT true")
+    private boolean active;
+
     public Wallet() {
 
     }

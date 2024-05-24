@@ -3,28 +3,12 @@ server:
 
 spring:
   config:
-    import: optional:configserver:http://localhost:9297
+    import: optional:configserver:http://config-server:9297
   application:
-    name: transaction-service
-  datasource:
-    url: jdbc:postgresql://localhost:5434/bankingservice_db
-    driver-class-name: org.postgresql.Driver
-    username: admin
-    password: password
-  jpa:
-    hibernate:
-      ddl-auto: update
+    name: banking-service
+  cloud:
+    config:
+      name: banking-service
+
 grpc:
   port: 6575
-
-transaction:
-  limit:
-    single: 2000.00
-    suspicious: 10000.00
-    daily: 10000.00
-    amount:
-      suspicious: 5
-      blocked: 10
-withdrawal:
-  limit:
-    daily: 5000

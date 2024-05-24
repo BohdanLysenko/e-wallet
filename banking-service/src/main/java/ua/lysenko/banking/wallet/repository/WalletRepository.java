@@ -6,7 +6,8 @@ import ua.lysenko.banking.entity.Wallet;
 import java.util.Optional;
 
 public interface WalletRepository extends JpaRepository<Wallet, Long> {
-    Optional<Wallet> findByUserId(Long userID);
+    Optional<Wallet> findByUserIdAndActiveIsTrue(Long userID);
 
 
+    Optional<Wallet> findByUserId(Long userId);
 }

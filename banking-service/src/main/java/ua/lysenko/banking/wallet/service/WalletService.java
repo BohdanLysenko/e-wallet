@@ -10,7 +10,12 @@ public interface WalletService {
 
     WalletDTO createWallet(Long userID);
 
-    Wallet getWalletByUserId(Long userId);
 
     List<Wallet> getAllWallets();
+
+    WalletDTO getWallet(String token);
+
+    void deleteWallet(String token);
+
+    Wallet findActiveWalletByUserId(Long userId);
 }

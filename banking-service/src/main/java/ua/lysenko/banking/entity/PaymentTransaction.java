@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.AuditOverride;
 import org.hibernate.envers.Audited;
+import ua.lysenko.banking.transaction.enums.TransactionType;
 
 @DiscriminatorValue("PAYMENT")
 @Entity
@@ -22,4 +23,10 @@ public class PaymentTransaction extends Transaction {
     public PaymentTransaction() {
 
     }
+
+    @Override
+    public TransactionType type() {
+        return TransactionType.PAYMENT;
+    }
+
 }

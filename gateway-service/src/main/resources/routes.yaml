@@ -1,5 +1,6 @@
-# User Service Routes
+#Routes
 USERS_ROUTE_URI: http://localhost:8081
+BANKING_ROUTE_URI: http://localhost:8146
 spring:
   cloud:
     gateway:
@@ -20,12 +21,12 @@ spring:
           predicates:
             - Method=POST
             - Path=/auth/signin
-        - id: get-user-by-id
+        - id: get-user-details
           uri: ${USERS_ROUTE_URI}
           predicates:
             - Method=GET
             - Header=Authorization, Bearer (.*)
-            - Path=/users/**
+            - Path=/users
           filters:
             - AuthorizationHeaderFilter
         - id: update-user-role
@@ -49,6 +50,6 @@ spring:
           predicates:
             - Method=GET
             - Header=Authorization, Bearer (.*)
-            - Path=/users
+            - Path=/users/all
           filters:
             - AuthorizationHeaderFilter

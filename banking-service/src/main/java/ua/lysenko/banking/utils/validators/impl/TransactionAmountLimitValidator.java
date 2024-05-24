@@ -26,6 +26,7 @@ public class TransactionAmountLimitValidator extends AbstractTransactionValidato
         if (transaction.getAmount().compareTo(singleTransactionAmountLimit) > 0) {
             log.warn(ExceptionKeys.SINGLE_TRANSACTION_LIMIT_EXCEEDED.getMessage());
             result.setValid(false);
+            result.getErrorMsg().add(ExceptionKeys.SINGLE_TRANSACTION_LIMIT_EXCEEDED.getMessage());
         }
         next(transaction, result);
     }

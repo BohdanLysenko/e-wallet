@@ -1,14 +1,13 @@
 server:
   port: 9297
-  
+
 spring:
+  profiles:
+    active: native
   application:
     name: config-server
   cloud:
     config:
       server:
-        git:
-          uri: https://github.com/BohdanLysenko/BankServiceConfig.git
-          clone-on-start: true
-          username: BohdanLysenko
-          password: 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
+        native:
+          search-locations: classpath:/configurations

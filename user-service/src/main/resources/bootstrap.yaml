@@ -2,4 +2,6 @@ spring:
   cloud:
     config:
       uri: http://localhost:9297
-      name: BankServiceConfigServer
+      name: ConfigServer
+  application:
+    name: user-service

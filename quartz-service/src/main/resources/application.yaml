@@ -1,0 +1,40 @@
+# Quartz configuration
+spring:
+  config:
+    import: optional:configserver:http://localhost:9297
+  application:
+    name: quartz-service
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    baseline-on-migrate: true
+    enabled: true
+    locations: classpath:db/migration
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: QuartzScheduler
+            instanceId: AUTO
+          jobStore:
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+            useProperties: false
+            dataSource: quartzDataSource
+            tablePrefix: QRTZ_
+            isClustered: true
+          threadPool:
+            threadCount: 5
+  datasource:
+    url: jdbc:postgresql://localhost:5436/quartzservice_db
+    driver-class-name: org.postgresql.Driver
+    username: admin
+    password: password
+grpc:
+  port: 6585
+server:
+  port: 8200
