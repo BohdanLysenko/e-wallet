@@ -85,7 +85,7 @@ public class WalletServiceImplTest {
         when(walletMapper.toWalletDTO(wallet)).thenReturn(expectedWalletDTO);
         when(cardMapper.cardsToCardDTOs(cards)).thenReturn(Collections.emptyList());
 
-        WalletDTO actualWalletDTO = walletService.getWallet(TOKEN);
+        WalletDTO actualWalletDTO = walletService.getWalletByToken(TOKEN);
 
         assertEquals(expectedWalletDTO, actualWalletDTO);
         verify(commonBankingServiceService).getCurrentUser(TOKEN);
@@ -105,7 +105,7 @@ public class WalletServiceImplTest {
         when(commonBankingServiceService.getCurrentUser(TOKEN)).thenReturn(userMessage);
         when(walletRepository.findByUserIdAndActiveIsTrue(USER_ID)).thenReturn(Optional.empty());
 
-        assertThrows(WalletNotFoundException.class, () -> walletService.getWallet(TOKEN));
+        assertThrows(WalletNotFoundException.class, () -> walletService.getWalletByToken(TOKEN));
     }
 
 

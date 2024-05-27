@@ -1,7 +1,10 @@
-# Quartz configuration
+server:
+  servlet:
+    context-path: /api/v1
+  port: 8200
 spring:
   config:
-    import: optional:configserver:http://localhost:9297
+    import: optional:configserver:${SPRING_CLOUD_CONFIG_URI:http://localhost:9297}
   application:
     name: quartz-service
   jpa:
@@ -14,7 +17,7 @@ spring:
   quartz:
     job-store-type: jdbc
     jdbc:
-      initialize-schema: never
+      initialize-schema: always
     properties:
       org:
         quartz:
@@ -29,12 +32,5 @@ spring:
             isClustered: true
           threadPool:
             threadCount: 5
-  datasource:
-    url: jdbc:postgresql://localhost:5436/quartzservice_db
-    driver-class-name: org.postgresql.Driver
-    username: admin
-    password: password
 grpc:
   port: 6585
-server:
-  port: 8200

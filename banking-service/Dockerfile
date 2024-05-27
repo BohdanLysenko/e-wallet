@@ -2,10 +2,9 @@
 FROM openjdk:17-jdk-slim
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /bankingservice
 
 # Copy the project’s jar file to the container
-COPY target/banking-service-0.0.1-SNAPSHOT.jar app.jar
-
+COPY banking-service/target/banking-service-0.0.1-SNAPSHOT.jar bankingservice.jar
 # Run the application
-ENTRYPOINT ["java", "-Djasypt.encryptor.password=${JASYPT_ENCRYPTOR_PASSWORD}", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Djasypt.encryptor.password=${JASYPT_ENCRYPTOR_PASSWORD}", "-jar", "bankingservice.jar"]

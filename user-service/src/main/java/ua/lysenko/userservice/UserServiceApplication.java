@@ -1,11 +1,11 @@
 package ua.lysenko.userservice;
 
+import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @SecurityScheme(
@@ -15,7 +15,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 		type = SecuritySchemeType.HTTP,
 		in = SecuritySchemeIn.HEADER
 )
-@EnableDiscoveryClient
+@EnableEncryptableProperties
 public class UserServiceApplication {
 
 	public static void main(String[] args) {

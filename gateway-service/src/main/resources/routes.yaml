@@ -1,4 +1,3 @@
-#Routes
 USERS_ROUTE_URI: http://localhost:8081
 BANKING_ROUTE_URI: http://localhost:8146
 spring:
@@ -27,29 +26,83 @@ spring:
             - Method=GET
             - Header=Authorization, Bearer (.*)
             - Path=/users
-          filters:
-            - AuthorizationHeaderFilter
         - id: update-user-role
           uri: ${USERS_ROUTE_URI}
           predicates:
             - Method=PATCH
             - Header=Authorization, Bearer (.*)
             - Path=/users/admin
-          filters:
-            - AuthorizationHeaderFilter
         - id: unblock-user
           uri: ${USERS_ROUTE_URI}
           predicates:
             - Method=POST
             - Header=Authorization, Bearer (.*)
             - Path=/users/unblock/**
-          filters:
-            - AuthorizationHeaderFilter
         - id: get-all-users
           uri: ${USERS_ROUTE_URI}
           predicates:
             - Method=GET
             - Header=Authorization, Bearer (.*)
             - Path=/users/all
-          filters:
-            - AuthorizationHeaderFilter
+        - id: check-health
+          uri: ${USERS_ROUTE_URI}
+          predicates:
+            - Method=GET
+            - Path=/actuator/health
+#Banking service routes
+        - id: create-card
+          uri: ${BANKING_ROUTE_URI}
+          predicates:
+            - Method=POST
+            - Header=Authorization, Bearer (.*)
+            - Path=/cards/create
+        - id: get-card-by-id
+          uri: ${BANKING_ROUTE_URI}
+          predicates:
+            - Method=GET
+            - Header=Authorization, Bearer (.*)
+            - Path=/cards/**
+
+        - id: get-wallet
+          uri: ${BANKING_ROUTE_URI}
+          predicates:
+            - Method=GET
+            - Header=Authorization, Bearer (.*)
+            - Path=/wallet
+        - id: delete-wallet
+          uri: ${BANKING_ROUTE_URI}
+          predicates:
+            - Method=DELETE
+            - Header=Authorization, Bearer (.*)
+            - Path=/wallet/delete
+
+        - id: deposit-transaction
+          uri: ${BANKING_ROUTE_URI}
+          predicates:
+            - Method=POST
+            - Header=Authorization, Bearer (.*)
+            - Path=/transactions/deposit
+        - id: withdrawal-transaction
+          uri: ${BANKING_ROUTE_URI}
+          predicates:
+            - Method=POST
+            - Header=Authorization, Bearer (.*)
+            - Path=/transactions/withdraw
+        - id: transfer-transaction
+          uri: ${BANKING_ROUTE_URI}
+          predicates:
+            - Method=POST
+            - Header=Authorization, Bearer (.*)
+            - Path=/transactions/transfer
+        - id: payment-transaction
+          uri: ${BANKING_ROUTE_URI}
+          predicates:
+            - Method=POST
+            - Header=Authorization, Bearer (.*)
+            - Path=/transactions/payment
+        - id: get-all-transactions
+          uri: ${BANKING_ROUTE_URI}
+          predicates:
+            - Method=GET
+            - Header=Authorization, Bearer (.*)
+            - Path=/transactions/all*

@@ -107,7 +107,7 @@ public class CardServiceImplTest {
         Card card = getCard(wallet);
         CardDTO expectedCardDTO = getCardDTO(wallet);
 
-        when(walletService.getWallet(VALID_TOKEN)).thenReturn(walletDTO);
+        when(walletService.getWalletByToken(VALID_TOKEN)).thenReturn(walletDTO);
         when(cardRepository.findByIdAndActiveIsTrue(card.getId())).thenReturn(Optional.of(card));
         when(cardMapper.toCardDto(card)).thenReturn(expectedCardDTO);
 
@@ -132,7 +132,7 @@ public class CardServiceImplTest {
                 .active(true)
                 .build();
 
-        when(walletService.getWallet(VALID_TOKEN)).thenReturn(walletDTO);
+        when(walletService.getWalletByToken(VALID_TOKEN)).thenReturn(walletDTO);
         when(cardRepository.findByIdAndActiveIsTrue(card.getId())).thenReturn(Optional.ofNullable(requesterCard));
 
         assertThrows(UnauthorizedAccessException.class, () -> cardService.getById(card.getId(), VALID_TOKEN));

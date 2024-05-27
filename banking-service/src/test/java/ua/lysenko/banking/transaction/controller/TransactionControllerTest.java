@@ -25,7 +25,7 @@ import ua.lysenko.banking.transaction.service.TransactionServiceContext;
 import ua.lysenko.banking.transaction.service.implementation.TransactionServiceImpl;
 import ua.lysenko.banking.utils.mappers.TransactionContextMapper;
 import ua.lysenko.banking.utils.mappers.TransactionControllerMapper;
-import ua.lysenko.banking.utils.mappers.TransactionMapper;
+import ua.lysenko.banking.utils.mappers.TransactionsResponseModelMapper;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class TransactionControllerTest {
     @MockBean
     private TransactionContextMapper transactionContextMapper;
     @MockBean
-    private TransactionMapper transactionMapper;
+    private TransactionsResponseModelMapper transactionMapper;
     @MockBean
     private TransactionControllerMapper transactionControllerMapper;
     @MockBean
@@ -196,7 +196,7 @@ public class TransactionControllerTest {
         PageRequest pageRequest = PageRequest.of(0, 20);
         when(transactionService.getAllTransactionsByCardId(VALID_TOKEN, requestModel.getCardNumber(),
                 pageRequest)).thenReturn(transactionsDTO);
-        when(transactionMapper.transactionsDTOToTransactionsResponseModel(transactionsDTO))
+        when(transactionMapper.toTransactionsResponseModel(any()))
                 .thenReturn(transactionResponseModels);
 
 

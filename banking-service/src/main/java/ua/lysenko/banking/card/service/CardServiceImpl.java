@@ -84,7 +84,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardDTO getById(Long id, String token) {
-        Long walletId = walletService.getWallet(token).getId();
+        Long walletId = walletService.getWalletByToken(token).getId();
         Card card = cardRepository.findByIdAndActiveIsTrue(id)
                 .orElseThrow(() -> new CardNotFoundException(
                         String.format(ExceptionKeys.CARD_NOT_FOUND.getMessage())));

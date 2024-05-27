@@ -1,6 +1,5 @@
 package ua.lysenko.banking.wallet.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -59,7 +58,7 @@ public class WalletControllerTest {
     void getWallet() throws Exception {
         WalletDTO walletDTO = buildWalletDTO();
         WalletResponseModel walletResponseModel = buildWalletResponseModel(walletDTO);
-        when(walletService.getWallet(VALID_TOKEN)).thenReturn(walletDTO);
+        when(walletService.getWalletByToken(VALID_TOKEN)).thenReturn(walletDTO);
         when(walletMapper.toWalletResponseModel(walletDTO)).thenReturn(walletResponseModel);
 
 

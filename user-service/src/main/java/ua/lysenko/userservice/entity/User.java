@@ -2,10 +2,11 @@ package ua.lysenko.userservice.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.envers.AuditOverride;
+import org.hibernate.envers.Audited;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,14 +16,17 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Data
-@Builder
-@AllArgsConstructor
+@Getter
+@Setter
+@SuperBuilder
+@Audited
+@AuditOverride(forClass = BaseEntity.class)
 @Table(name = "users")
-public class User implements UserDetails {
+@SequenceGenerator(name = "sequence", sequenceName = "user_id_seq", allocationSize=1)
+public class User extends BaseEntity implements UserDetails {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
     private Long id;
 
     @Column(nullable = false, length = 50)

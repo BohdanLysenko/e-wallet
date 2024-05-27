@@ -54,7 +54,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public WalletDTO getWallet(String token) {
+    public WalletDTO getWalletByToken(String token) {
         UserMessage userMessage = commonBankingServiceService.getCurrentUser(token);
         Wallet wallet = walletRepository.findByUserIdAndActiveIsTrue(userMessage.getId())
                 .orElseThrow(() -> new WalletNotFoundException(ExceptionKeys.WALLET_NOT_FOUND.getMessage()));
@@ -64,6 +64,13 @@ public class WalletServiceImpl implements WalletService {
         walletDTO.setWalletHolderName(userMessage.getFirstName());
         walletDTO.setWalletHolderLastName(userMessage.getLastName());
         return walletDTO;
+    }
+
+    @Override
+    public WalletDTO getWalletByUserId(Long userId) {
+        Wallet wallet = walletRepository.findByUserIdAndActiveIsTrue(userId)
+                .orElseThrow(()-> new WalletNotFoundException(ExceptionKeys.WALLET_NOT_FOUND.getMessage()));
+        return walletMapper.toWalletDTO(wallet);
     }
 
     @Override

@@ -3,6 +3,7 @@ DB_NAME: userservice_db
 DB_PORT: 5432
 DB_USERNAME: admin
 DB_PASSWORD: password
+BANKING_GRPC_HOST: localhost
 token:
   signing:
     key: ENC(rE3HbNAQPtph/56qWq+HGnQorLwTVA2IInM5/3eSSl1lJMhHzeW/iMc091Vv8nCDwaAi3SoKdwcsKfiLbWcp+cGPNNl5EGfcJpaknqwIHlNs2ibKMiCXhpnfmhGuBu6ct4RN21jLySGZybDwgxef1Q==)
@@ -17,4 +18,4 @@ spring:
     password: ${DB_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate

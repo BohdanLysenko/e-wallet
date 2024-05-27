@@ -4,6 +4,7 @@ import common.grpc.users.UserServiceGrpc;
 import common.grpc.users.UserUnblockRequest;
 import common.grpc.users.UserUnblockResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.lognet.springboot.grpc.GRpcService;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -14,7 +15,7 @@ import ua.lysenko.quartzservice.repository.JobHistoryRepository;
 
 import java.util.Date;
 
-@Service
+@GRpcService
 @Slf4j
 public class QuartzService {
     @Autowired

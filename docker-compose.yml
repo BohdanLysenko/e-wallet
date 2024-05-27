@@ -1,0 +1,122 @@
+version: '3.8'
+
+services:
+  banking_db:
+    image: postgres:latest
+    container_name: banking_postgres
+    hostname: banking_postgres
+    ports:
+      - "5434:5432"
+    env_file:
+      - envs/banking_db.env
+    volumes:
+      - banking_postgres_data:/var/lib/postgresql/data
+
+  users_db:
+    image: postgres:latest
+    container_name: users_postgres
+    hostname: users_postgres
+    ports:
+      - "5432:5432"
+    env_file:
+      - envs/users_db.env
+    volumes:
+      - users_postgres_data:/var/lib/postgresql/data
+
+  quartz_db:
+    image: postgres:latest
+    container_name: quartz_postgres
+    hostname: quartz_postgres
+    ports:
+      - "5436:5432"
+    env_file:
+      - envs/quartz_db.env
+    volumes:
+      - quartz_postgres_data:/var/lib/postgresql/data
+
+  config-server:
+    build:
+      context: .
+      dockerfile: config-service/Dockerfile
+    container_name: config-service
+    hostname: config-service
+    ports:
+      - "9297:9297"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "localhost:9297/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  gateway-service:
+    build:
+      context: .
+      dockerfile: gateway-service/Dockerfile
+    container_name: gateway-service
+    hostname: gateway-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - config-server
+      - user-service
+    env_file:
+      - envs/gateway-service.env
+
+  quartz-service:
+    build:
+      context: .
+      dockerfile: quartz-service/Dockerfile
+    container_name: quartz-service
+    hostname: quartz-service
+    ports:
+      - "8200:8200"
+      - "6585:6585"
+    depends_on:
+      - config-server
+      - quartz_db
+    env_file:
+      - envs/quartz-service.env
+    restart: on-failure
+
+  user-service:
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    container_name: user-service
+    hostname: user-service
+    ports:
+      - "8081:8081"
+      - "6570:6570"
+      - "5005:5005"
+    depends_on:
+      - users_db
+      - config-server
+    restart: on-failure
+    env_file:
+      - envs/user-service.env
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "localhost:8080/actuator/health" ]
+      interval: 45s
+      timeout: 10s
+      retries: 5
+
+  banking-service:
+    build:
+      context: .
+      dockerfile: banking-service/Dockerfile
+    container_name: banking-service
+    hostname: banking-service
+    ports:
+      - "8146:8146"
+      - "6575:6575"
+    depends_on:
+      - banking_db
+      - config-server
+    restart: on-failure
+    env_file:
+      - envs/banking-service.env
+
+volumes:
+  banking_postgres_data:
+  users_postgres_data:
+  quartz_postgres_data:

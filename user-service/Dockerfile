@@ -1,15 +1,10 @@
-# Use a base image with Java 17 installed
-FROM openjdk:17
+# Use an official OpenJDK runtime as a parent image
+FROM openjdk:17-jdk-slim
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /userservice
 
-# Expose ports for MySQL connection and Java application
-EXPOSE 8080
-EXPOSE 3306
-
-# Copy the compiled Java application (e.g., JAR file) into the container
-COPY target/userservice-0.0.1-SNAPSHOT.jar /app/userservice.jar
-
-# Command to run the Java application
-CMD ["java", "-jar", "userservice.jar"]
+# Copy the project’s jar file to the container
+COPY user-service/target/user-service-0.0.1-SNAPSHOT.jar userservice.jar
+# Run the application
+ENTRYPOINT ["java", "-Djasypt.encryptor.password=${JASYPT_ENCRYPTOR_PASSWORD}", "-jar", "userservice.jar"]

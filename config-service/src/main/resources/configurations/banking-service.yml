@@ -3,6 +3,7 @@ DB_NAME: bankingservice_db
 DB_PORT: 5434
 DB_USERNAME: admin
 DB_PASSWORD: password
+USERS_GRPC_HOST: localhost
 server:
   servlet:
     context-path: /api/v1

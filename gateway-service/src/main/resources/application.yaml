@@ -3,7 +3,7 @@ server:
 spring:
   config:
     import:
-    - optional:configserver:http://localhost:9297
+    - optional:configserver:${SPRING_CLOUD_CONFIG_URI:http://localhost:9297}
     - optional:classpath:routes.yaml
   application:
     name: gateway-service

@@ -1,5 +1,7 @@
 package ua.lysenko.banking.transaction.service.implementation;
 
+import common.grpc.users.UserMessage;
+import org.apache.catalina.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +16,7 @@ import ua.lysenko.banking.card.DTO.CardDTO;
 import ua.lysenko.banking.card.service.CardService;
 import ua.lysenko.banking.entity.Transaction;
 import ua.lysenko.banking.exception.UnauthorizedAccessException;
+import ua.lysenko.banking.service.CommonBankingServiceGrpc;
 import ua.lysenko.banking.transaction.DTO.TransactionDTO;
 import ua.lysenko.banking.transaction.enums.TransactionType;
 import ua.lysenko.banking.transaction.repository.TransactionRepository;
@@ -53,6 +56,9 @@ public class TransactionServiceImplTest {
     @Mock
     private TransactionMapper transactionMapper;
 
+    @Mock
+    CommonBankingServiceGrpc commonBankingServiceGrpc;
+
     @InjectMocks
     TransactionServiceImpl transactionService;
 
@@ -61,14 +67,15 @@ public class TransactionServiceImplTest {
     void getAllTransactions() {
         WalletDTO walletDTO = buildWalletDTO(WALLET_ID);
         CardDTO cardDTO = buildCardDTO();
+        UserMessage userMessage = buildUserMessage();
         TransactionDTO transactionDTO = buildTransactionDTO();
         List<Transaction> transactionsList = new ArrayList<>(List.of(buildTransaction(), buildTransaction(),
                 buildTransaction()));
         Pageable pageable = PageRequest.of(0, 10);
         Page<Transaction> transactions = new PageImpl<>(transactionsList, pageable, transactionsList.size());
 
-
-        when(walletService.getWallet(VALID_TOKEN)).thenReturn(walletDTO);
+        when(commonBankingServiceGrpc.getCurrentUser(VALID_TOKEN)).thenReturn(userMessage);
+        when(walletService.getWalletByUserId(userMessage.getId())).thenReturn(walletDTO);
         when(cardService.getByCardNumber(CARD_NUMBER)).thenReturn(cardDTO);
         when(transactionRepository.findAllByCardIdOrderByCreatedDateDesc(any(),
                 any())).thenReturn(transactions);
@@ -89,8 +96,10 @@ public class TransactionServiceImplTest {
     void getAllTransactionsException() {
         WalletDTO walletDTO = buildWalletDTO(123L);
         CardDTO cardDTO = buildCardDTO();
+        UserMessage userMessage = buildUserMessage();
 
-        when(walletService.getWallet(VALID_TOKEN)).thenReturn(walletDTO);
+        when(commonBankingServiceGrpc.getCurrentUser(VALID_TOKEN)).thenReturn(userMessage);
+        when(walletService.getWalletByUserId(userMessage.getId())).thenReturn(walletDTO);
         when(cardService.getByCardNumber(CARD_NUMBER)).thenReturn(cardDTO);
 
         UnauthorizedAccessException exception =
@@ -100,6 +109,12 @@ public class TransactionServiceImplTest {
 
         assertEquals(ExceptionKeys.UNAUTHORIZED_ACCESS.getMessage(), exception.getMessage());
 
+    }
+
+    private static UserMessage buildUserMessage() {
+        return UserMessage.newBuilder()
+                .setId(USER_ID)
+                .build();
     }
 
     private static WalletDTO buildWalletDTO(Long id) {

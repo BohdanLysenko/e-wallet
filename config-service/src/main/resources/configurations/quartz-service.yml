@@ -1,0 +1,18 @@
+DB_NAME: quartzservice_db
+DB_PORT: 5436
+DB_USERNAME: admin
+DB_PASSWORD: password
+USERS_GRPC_HOST: localhost
+server:
+  servlet:
+    context-path: /api/v1
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:${DB_PORT}/${DB_NAME}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    jpa:
+      hibernate:
+        ddl-auto: validate
+      database-platform: org.hibernate.dialect.PostgreSQLDialect

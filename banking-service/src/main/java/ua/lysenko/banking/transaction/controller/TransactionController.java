@@ -17,7 +17,7 @@ import ua.lysenko.banking.transaction.service.TransactionServiceContext;
 import ua.lysenko.banking.transaction.service.implementation.TransactionServiceImpl;
 import ua.lysenko.banking.utils.mappers.TransactionContextMapper;
 import ua.lysenko.banking.utils.mappers.TransactionControllerMapper;
-import ua.lysenko.banking.utils.mappers.TransactionMapper;
+import ua.lysenko.banking.utils.mappers.TransactionsResponseModelMapper;
 
 import java.util.List;
 
@@ -28,17 +28,18 @@ public class TransactionController {
     private final TransactionServiceContext transactionContext;
 
     private final TransactionContextMapper transactionContextMapper;
-    private final TransactionMapper transactionMapper;
+    private final TransactionsResponseModelMapper transactionsResponseMapper;
     private final TransactionControllerMapper transactionControllerMapper;
     private final TransactionServiceImpl transactionService;
 
     public TransactionController(TransactionServiceContext transactionContext,
                                  TransactionContextMapper transactionContextMapper,
-                                 TransactionMapper transactionMapper, TransactionControllerMapper transactionControllerMapper,
+                                 TransactionsResponseModelMapper transactionMapper,
+                                 TransactionControllerMapper transactionControllerMapper,
                                  TransactionServiceImpl transactionService) {
         this.transactionContext = transactionContext;
         this.transactionContextMapper = transactionContextMapper;
-        this.transactionMapper = transactionMapper;
+        this.transactionsResponseMapper = transactionMapper;
         this.transactionControllerMapper = transactionControllerMapper;
         this.transactionService = transactionService;
     }
@@ -54,7 +55,7 @@ public class TransactionController {
         // Each time we need to create a new model, so it can be mapped properly as MapStruct can't catch booleans
         // where get method starts with iS (default for builders).
         TransactionResponseModel response = new TransactionResponseModel();
-        response = transactionContextMapper.toTransactionResponseModel(transactionDTO,response);
+        response = transactionContextMapper.toTransactionResponseModel(transactionDTO, response);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -67,7 +68,7 @@ public class TransactionController {
         transactionDTO = transactionContext.processTransaction(authorizationHeader,
                 transactionDTO, TransactionType.WITHDRAWAL);
         TransactionResponseModel response = new TransactionResponseModel();
-        response = transactionContextMapper.toTransactionResponseModel(transactionDTO,response);
+        response = transactionContextMapper.toTransactionResponseModel(transactionDTO, response);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -80,7 +81,7 @@ public class TransactionController {
         transactionDTO = transactionContext.processTransaction(authorizationHeader,
                 transactionDTO, TransactionType.TRANSFER);
         TransactionResponseModel response = new TransactionResponseModel();
-        response = transactionContextMapper.toTransactionResponseModel(transactionDTO,response);
+        response = transactionContextMapper.toTransactionResponseModel(transactionDTO, response);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -93,21 +94,20 @@ public class TransactionController {
         transactionDTO = transactionContext.processTransaction(authorizationHeader,
                 transactionDTO, TransactionType.PAYMENT);
         TransactionResponseModel response = new TransactionResponseModel();
-        response = transactionContextMapper.toTransactionResponseModel(transactionDTO,response);
+        response = transactionContextMapper.toTransactionResponseModel(transactionDTO, response);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/all")
     @Operation(summary = "Get list of all transactions")
     public ResponseEntity<List<TransactionResponseModel>> getAllTransactionsByCardNumber(@RequestHeader("Authorization")
-                                                                             String authorizationHeader,
-                                                                             @RequestParam String cardNumber,
-                                                                             @RequestParam(defaultValue = "0")
-                                                                             Integer pageNumber,
-                                                                             @RequestParam(defaultValue = "20")
-                                                                             Integer pageSize) {
-
-        List<TransactionResponseModel> response = transactionMapper.transactionsDTOToTransactionsResponseModel(
+                                                                                         String authorizationHeader,
+                                                                                         @RequestParam String cardNumber,
+                                                                                         @RequestParam(defaultValue = "0")
+                                                                                         Integer pageNumber,
+                                                                                         @RequestParam(defaultValue = "20")
+                                                                                         Integer pageSize) {
+        List<TransactionResponseModel> response = transactionsResponseMapper.toTransactionsResponseModel(
                 transactionService.getAllTransactionsByCardId(authorizationHeader, cardNumber,
                         PageRequest.of(pageNumber, pageSize)));
         return ResponseEntity.status(HttpStatus.OK).body(response);

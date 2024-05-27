@@ -24,7 +24,7 @@ public class WalletController {
     @GetMapping
     @Operation(summary = "Get wallet with attached Card for Current User")
     public ResponseEntity<WalletResponseModel> getWallet(@RequestHeader("Authorization") String token) {
-        WalletResponseModel retVal = walletMapper.toWalletResponseModel(walletService.getWallet(token));
+        WalletResponseModel retVal = walletMapper.toWalletResponseModel(walletService.getWalletByToken(token));
         return ResponseEntity.status(HttpStatus.OK).body(retVal);
     }
 

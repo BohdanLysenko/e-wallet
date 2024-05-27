@@ -13,7 +13,9 @@ public interface WalletService {
 
     List<Wallet> getAllWallets();
 
-    WalletDTO getWallet(String token);
+    WalletDTO getWalletByToken(String token);
+
+    WalletDTO getWalletByUserId(Long userId);
 
     void deleteWallet(String token);
 

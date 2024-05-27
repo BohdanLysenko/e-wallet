@@ -12,7 +12,7 @@ public interface UsersRepository extends JpaRepository<User, Long> {
     Optional<User> findById(Long id);
 
     @Modifying
-    @Query(value = "update users set is_transaction_blocked = true where is_transaction_blocked = false",
+    @Query(value = "update users set is_transaction_blocked = false where is_transaction_blocked = true",
             nativeQuery = true)
     void unblockAllBlockedUsers();
 }
