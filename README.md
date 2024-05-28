@@ -24,7 +24,7 @@ withdrawal limit of 5000 EUR.
 * **Docker**: For containerization of services and databases.
 * **Spring Cloud**: For service discovery and configuration management.
 * **FlyWay**: For applying consistent db migrations
-* **Quartz Schedule**: For managing schedules jobs
+* **Quartz Scheduler**: For managing schedules jobs
 
 ## Getting Started
 
@@ -60,7 +60,7 @@ service.
 5) The example of the requests can be found here: 
 [Postman shared folder](https://app.getpostman.com/join-team?invite_code=d0d98acb5e96910fbb64b04c0920f888)
 
-### General workflow
+## General workflow
 1) Create a user by providing your credentials (this will also create a wallet and generate JWT token)
 2) Create a new card by providing the JWT token
 3) Deposit/withdraw funds to your card by providing JWT token and card number
@@ -69,7 +69,7 @@ card number.
 5) Send payments to external merchants by providing JWT token, card number and merchant identifier.
 6) Get the transaction history by providing JWT token and a card number.
 
-### Contributing
+## Contributing
 Contributions to the project are highly appreciated! 
 If you are interested in contributing, please follow these steps:
 
