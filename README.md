@@ -51,7 +51,7 @@ The project consists of several services, each responsible for a specific functi
 [gateway-service](gateway-service), [quartz-service](quartz-service), [user-service](user-service) to generate
 jar files in target.
 3) Run `docker-compose build` in the root directory.
-4Run `docker-compose up` to start the application. 
+4) Run `docker-compose up` to start the application. 
 Please refer to [docker-compose.yml](..%2Fdocker-compose.yml) alongside [envs](..%2Fenvs) for the containers 
 configuration. 
 If you want to start any of the services separately you can run `docker-compose -f docker-compose-db.yml up`
