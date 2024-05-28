@@ -47,8 +47,11 @@ The project consists of several services, each responsible for a specific functi
 ### Installation
 
 1) Clone the repository `git clone https://github.com/BohdanLysenko/e-wallet.git`
-2) Run `docker-compose build` in the root directory.
-3) Run `docker-compose up` to start the application. 
+2) Run `mvn clean install` in [banking-service](banking-service), [config-service](config-service),
+[gateway-service](gateway-service), [quartz-service](quartz-service), [user-service](user-service) to generate
+jar files in target.
+3) Run `docker-compose build` in the root directory.
+4Run `docker-compose up` to start the application. 
 Please refer to [docker-compose.yml](..%2Fdocker-compose.yml) alongside [envs](..%2Fenvs) for the containers 
 configuration. 
 If you want to start any of the services separately you can run `docker-compose -f docker-compose-db.yml up`
@@ -56,8 +59,8 @@ to create databases and then run/debug any of the desired service.
 If you need to adjust any of the application properties you would be able to do that by changing values inside
 [configurations](src%2Fmain%2Fresources%2Fconfigurations) folder of the **config-service** and application.yml of the
 service.
-4) Make sure that the application is **_up_** by sending GET request to [localhost:8080/actuator/health]().
-5) The example of the requests can be found here: 
+5) Make sure that the application is **_up_** by sending GET request to [localhost:8080/actuator/health]().
+6) The example of the requests can be found here: 
 [Postman shared folder](https://app.getpostman.com/join-team?invite_code=d0d98acb5e96910fbb64b04c0920f888)
 
 ## General workflow
