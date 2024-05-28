@@ -1,0 +1,612 @@
+{
+	"info": {
+		"_postman_id": "4657af62-e9d7-4ded-9acc-11a4f91a952f",
+		"name": "Bank Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18627164",
+		"_collection_link": "https://e-wallet-api-team.postman.co/workspace/E-wallet-API-team-Workspace~f32c0242-6758-4ceb-9944-b3712d0a482b/collection/18627164-4657af62-e9d7-4ded-9acc-11a4f91a952f?action=share&source=collection_link&creator=18627164"
+	},
+	"item": [
+		{
+			"name": "Gateway Service",
+			"item": [
+				{
+					"name": "user-service",
+					"item": [
+						{
+							"name": "SignUp",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"firstName\": \"John\",\r\n  \"lastName\": \"Doe\",\r\n  \"email\": \"test121@example.com\",\r\n  \"password\": \"Admin12!\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/auth/signup",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"auth",
+										"signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "SignIn",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"test11@example.com\",\r\n  \"password\": \"Admin12!\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/auth/signin",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"auth",
+										"signin"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Set User Admin Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0NDFAZ21haWwuY29tIiwiaWF0IjoxNzE2NDg0NTIyLCJleHAiOjE3MTY1MDE4MDJ9.tvpbqtnYjx38FIyA36EPAj4bsK_pBUNl16WHCNvw3HE",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/users/admin?email=test3@gmail.com",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"users",
+										"admin"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "test3@gmail.com"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Users",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTNAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTY4MDI0ODAsImV4cCI6MTcxNjgxOTc2MH0.oNtOMDejPjspER6FS8Db2O1KEn3g_FtmXhFDkaA-IIc",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/users/all",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"users",
+										"all"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get User Details by token",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTIzQGV4YW1wbGUuY29tIiwiaWF0IjoxNzE2ODI0NTQ0LCJleHAiOjE3MTY4NDE4MjR9.JDnxND7YKpKtqfWeDvQKAO9T53OgcCIZ39KVg-K9UTQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/users",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "health",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"amount\": \"2\",\r\n  \"cardNumber\": 8521175719876887,\r\n  \"merchantId\": 7133844835830640\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/actuator/health",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"actuator",
+										"health"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Banking service",
+					"item": [
+						{
+							"name": "Create Card",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTZAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTY4MDMzMzQsImV4cCI6MTcxNjgyMDYxNH0.usn5q5IpgMz8Wlrn-P3J_LPz7n2n1E4wVP7pK68yXAg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": \"Admin12!\",\r\n  \"email\": \"test11231@example.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/cards/create",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"cards",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Card By Id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTZAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTY4MDMzMzQsImV4cCI6MTcxNjgyMDYxNH0.usn5q5IpgMz8Wlrn-P3J_LPz7n2n1E4wVP7pK68yXAg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": \"Admin12!\",\r\n  \"email\": \"test11231@example.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/cards/2",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"cards",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete wallet",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTZAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTY4MDMzMzQsImV4cCI6MTcxNjgyMDYxNH0.usn5q5IpgMz8Wlrn-P3J_LPz7n2n1E4wVP7pK68yXAg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": \"Admin12!\",\r\n  \"email\": \"test11231@example.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/wallet/delete",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"wallet",
+										"delete"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Wallet",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTZAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTY4MDMzMzQsImV4cCI6MTcxNjgyMDYxNH0.usn5q5IpgMz8Wlrn-P3J_LPz7n2n1E4wVP7pK68yXAg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"password\": \"Admin12!\",\r\n  \"email\": \"test11231@example.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/wallet",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"wallet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deposit",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTFAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTY4MjY1MDYsImV4cCI6MTcxNjg0Mzc4Nn0.C4s29w1plThtH0hl_kwYeOxbUbCTtY4Q5jq6FgeHOAk",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"amount\": 165,\r\n  \"cardNumber\": 5190048214526135\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/transactions/deposit",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"transactions",
+										"deposit"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Withdraw",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MzEyMUBleGFtcGxlLmNvbSIsImlhdCI6MTcxNjgxNzUwNywiZXhwIjoxNzE2ODM0Nzg3fQ.nXmDf1iyVtT_9C7rqV-ZT4OghcAv-3HG8WNervdJOB0",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"amount\": \"0.01\",\r\n  \"cardNumber\": 1635453194709081\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/transactions/withdraw",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"transactions",
+										"withdraw"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Transfer",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTZAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTY4MDMzMzQsImV4cCI6MTcxNjgyMDYxNH0.usn5q5IpgMz8Wlrn-P3J_LPz7n2n1E4wVP7pK68yXAg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"amount\": \"2\",\r\n  \"cardNumber\": 8665546507310093,\r\n  \"destinationCardNumber\": 2270846213968914\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/transactions/transfer",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"transactions",
+										"transfer"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Payment",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTZAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTY4MDMzMzQsImV4cCI6MTcxNjgyMDYxNH0.usn5q5IpgMz8Wlrn-P3J_LPz7n2n1E4wVP7pK68yXAg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"amount\": \"2\",\r\n  \"cardNumber\": 8665546507310093,\r\n  \"merchantId\": 7133844835830640\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/transactions/payment",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"transactions",
+										"payment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Transactions by card number",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTZAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTY4MDMzMzQsImV4cCI6MTcxNjgyMDYxNH0.usn5q5IpgMz8Wlrn-P3J_LPz7n2n1E4wVP7pK68yXAg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"amount\": \"2\",\r\n  \"cardNumber\": 8521175719876887,\r\n  \"merchantId\": 7133844835830640\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/transactions/all?cardNumber=1635453194709081",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"transactions",
+										"all"
+									],
+									"query": [
+										{
+											"key": "cardNumber",
+											"value": "1635453194709081"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Banking Swagger",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTZAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTY4MDMzMzQsImV4cCI6MTcxNjgyMDYxNH0.usn5q5IpgMz8Wlrn-P3J_LPz7n2n1E4wVP7pK68yXAg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"amount\": \"2\",\r\n  \"cardNumber\": 8521175719876887,\r\n  \"merchantId\": 7133844835830640\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/banking/swagger-ui.html",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"banking",
+										"swagger-ui.html"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
