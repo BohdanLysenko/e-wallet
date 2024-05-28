@@ -82,3 +82,12 @@ If you are interested in contributing, please follow these steps:
 4) Commit your changes `git commit -m "Add new feature/ Fix bug"`
 5) Push your changes to your forked repository `git push origin my-feature`
 6) Create a Pull Request with the detailed description of the changes.
+
+
+# Additional
+## Points to be improved
+1. MapStruct has issues with Booleans prefixed with "is," so I would adjust the mapping logic to use manually written mappers.
+2. Endpoints should be moved to the gateway service, as it currently only handles simple redirects. The gateway could also parse JWT tokens, but this requires additional filters. I created an AuthorizationHeaderFilter but haven't incorporated it yet.
+3. With endpoints on the gateway, controllers can be fully removed from services, turning them into plain gRPC services.
+4. Eureka Discovery can be added to scale the microservices, but it will require additional configuration for stubbing channels.
+
