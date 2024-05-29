@@ -62,6 +62,7 @@ service.
 5) Make sure that the application is **_up_** by sending GET request to [localhost:8080/actuator/health]().
 6) The example of the requests can be found here: 
 [Postman shared folder](https://app.getpostman.com/join-team?invite_code=d0d98acb5e96910fbb64b04c0920f888)
+/[Postman JSON collection](Bank%20Service.postman_collection.json)
 
 ## General workflow
 1) Create a user by providing your credentials (this will also create a wallet and generate JWT token)
