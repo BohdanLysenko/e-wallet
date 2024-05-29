@@ -1,5 +1,6 @@
 package ua.lysenko.banking.transaction.service.implementation;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ua.lysenko.banking.card.service.CardService;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@Transactional
 public class PaymentTransactionService implements TransactionService {
     private final CardService cardService;
 

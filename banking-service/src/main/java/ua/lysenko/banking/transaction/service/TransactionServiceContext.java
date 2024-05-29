@@ -1,6 +1,7 @@
 package ua.lysenko.banking.transaction.service;
 
 import common.grpc.users.UserMessage;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ua.lysenko.banking.card.service.CardService;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
+@Transactional
 public class TransactionServiceContext {
     private final Map<TransactionType, TransactionService> processTransactionByType;
     private final CardService cardService;
