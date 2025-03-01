@@ -5,7 +5,7 @@ import static io.grpc.MethodDescriptor.generateFullMethodName;
 /**
  */
 @javax.annotation.Generated(
-    value = "by gRPC proto compiler (version 1.40.1)",
+    value = "by gRPC proto compiler (version 1.55.1)",
     comments = "Source: common-transaction.proto")
 @io.grpc.stub.annotations.GrpcGenerated
 public final class TransactionServiceGrpc {
@@ -123,48 +123,42 @@ public final class TransactionServiceGrpc {
 
   /**
    */
-  public static abstract class TransactionServiceImplBase implements io.grpc.BindableService {
+  public interface AsyncService {
 
     /**
      * <pre>
      *  rpc getTransactionById(TransactionRequest) returns (TransactionResponse);
      * </pre>
      */
-    public void createTransaction(common.grpc.transactions.CreateTransactionRequest request,
+    default void createTransaction(common.grpc.transactions.CreateTransactionRequest request,
         io.grpc.stub.StreamObserver<common.grpc.transactions.TransactionResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getCreateTransactionMethod(), responseObserver);
     }
 
     /**
      */
-    public void createTransactionTransfer(common.grpc.transactions.CreateTransactionTransferRequest request,
+    default void createTransactionTransfer(common.grpc.transactions.CreateTransactionTransferRequest request,
         io.grpc.stub.StreamObserver<common.grpc.transactions.TransactionResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getCreateTransactionTransferMethod(), responseObserver);
-    }
-
-    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
-      return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
-          .addMethod(
-            getCreateTransactionMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                common.grpc.transactions.CreateTransactionRequest,
-                common.grpc.transactions.TransactionResponse>(
-                  this, METHODID_CREATE_TRANSACTION)))
-          .addMethod(
-            getCreateTransactionTransferMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                common.grpc.transactions.CreateTransactionTransferRequest,
-                common.grpc.transactions.TransactionResponse>(
-                  this, METHODID_CREATE_TRANSACTION_TRANSFER)))
-          .build();
     }
   }
 
   /**
+   * Base class for the server implementation of the service TransactionService.
    */
-  public static final class TransactionServiceStub extends io.grpc.stub.AbstractAsyncStub<TransactionServiceStub> {
+  public static abstract class TransactionServiceImplBase
+      implements io.grpc.BindableService, AsyncService {
+
+    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
+      return TransactionServiceGrpc.bindService(this);
+    }
+  }
+
+  /**
+   * A stub to allow clients to do asynchronous rpc calls to service TransactionService.
+   */
+  public static final class TransactionServiceStub
+      extends io.grpc.stub.AbstractAsyncStub<TransactionServiceStub> {
     private TransactionServiceStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -197,8 +191,10 @@ public final class TransactionServiceGrpc {
   }
 
   /**
+   * A stub to allow clients to do synchronous rpc calls to service TransactionService.
    */
-  public static final class TransactionServiceBlockingStub extends io.grpc.stub.AbstractBlockingStub<TransactionServiceBlockingStub> {
+  public static final class TransactionServiceBlockingStub
+      extends io.grpc.stub.AbstractBlockingStub<TransactionServiceBlockingStub> {
     private TransactionServiceBlockingStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -229,8 +225,10 @@ public final class TransactionServiceGrpc {
   }
 
   /**
+   * A stub to allow clients to do ListenableFuture-style rpc calls to service TransactionService.
    */
-  public static final class TransactionServiceFutureStub extends io.grpc.stub.AbstractFutureStub<TransactionServiceFutureStub> {
+  public static final class TransactionServiceFutureStub
+      extends io.grpc.stub.AbstractFutureStub<TransactionServiceFutureStub> {
     private TransactionServiceFutureStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -270,10 +268,10 @@ public final class TransactionServiceGrpc {
       io.grpc.stub.ServerCalls.ServerStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.ClientStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.BidiStreamingMethod<Req, Resp> {
-    private final TransactionServiceImplBase serviceImpl;
+    private final AsyncService serviceImpl;
     private final int methodId;
 
-    MethodHandlers(TransactionServiceImplBase serviceImpl, int methodId) {
+    MethodHandlers(AsyncService serviceImpl, int methodId) {
       this.serviceImpl = serviceImpl;
       this.methodId = methodId;
     }
@@ -304,6 +302,25 @@ public final class TransactionServiceGrpc {
           throw new AssertionError();
       }
     }
+  }
+
+  public static final io.grpc.ServerServiceDefinition bindService(AsyncService service) {
+    return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
+        .addMethod(
+          getCreateTransactionMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              common.grpc.transactions.CreateTransactionRequest,
+              common.grpc.transactions.TransactionResponse>(
+                service, METHODID_CREATE_TRANSACTION)))
+        .addMethod(
+          getCreateTransactionTransferMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              common.grpc.transactions.CreateTransactionTransferRequest,
+              common.grpc.transactions.TransactionResponse>(
+                service, METHODID_CREATE_TRANSACTION_TRANSFER)))
+        .build();
   }
 
   private static abstract class TransactionServiceBaseDescriptorSupplier

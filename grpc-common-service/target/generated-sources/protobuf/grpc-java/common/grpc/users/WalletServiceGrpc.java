@@ -5,7 +5,7 @@ import static io.grpc.MethodDescriptor.generateFullMethodName;
 /**
  */
 @javax.annotation.Generated(
-    value = "by gRPC proto compiler (version 1.40.1)",
+    value = "by gRPC proto compiler (version 1.55.1)",
     comments = "Source: wallet.proto")
 @io.grpc.stub.annotations.GrpcGenerated
 public final class WalletServiceGrpc {
@@ -185,73 +185,53 @@ public final class WalletServiceGrpc {
 
   /**
    */
-  public static abstract class WalletServiceImplBase implements io.grpc.BindableService {
+  public interface AsyncService {
 
     /**
      */
-    public void createWallet(common.grpc.users.CreateWalletRequest request,
+    default void createWallet(common.grpc.users.CreateWalletRequest request,
         io.grpc.stub.StreamObserver<common.grpc.users.WalletResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getCreateWalletMethod(), responseObserver);
     }
 
     /**
      */
-    public void getWalletByUserId(common.grpc.users.GetWalletByUserIdRequest request,
+    default void getWalletByUserId(common.grpc.users.GetWalletByUserIdRequest request,
         io.grpc.stub.StreamObserver<common.grpc.users.WalletResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetWalletByUserIdMethod(), responseObserver);
     }
 
     /**
      */
-    public void check(common.grpc.users.HealthCheckRequest request,
+    default void check(common.grpc.users.HealthCheckRequest request,
         io.grpc.stub.StreamObserver<common.grpc.users.HealthCheckResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getCheckMethod(), responseObserver);
     }
 
     /**
      */
-    public void getAllWallets(com.google.protobuf.Empty request,
+    default void getAllWallets(com.google.protobuf.Empty request,
         io.grpc.stub.StreamObserver<common.grpc.users.AllWalletsResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetAllWalletsMethod(), responseObserver);
-    }
-
-    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
-      return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
-          .addMethod(
-            getCreateWalletMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                common.grpc.users.CreateWalletRequest,
-                common.grpc.users.WalletResponse>(
-                  this, METHODID_CREATE_WALLET)))
-          .addMethod(
-            getGetWalletByUserIdMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                common.grpc.users.GetWalletByUserIdRequest,
-                common.grpc.users.WalletResponse>(
-                  this, METHODID_GET_WALLET_BY_USER_ID)))
-          .addMethod(
-            getCheckMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                common.grpc.users.HealthCheckRequest,
-                common.grpc.users.HealthCheckResponse>(
-                  this, METHODID_CHECK)))
-          .addMethod(
-            getGetAllWalletsMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                com.google.protobuf.Empty,
-                common.grpc.users.AllWalletsResponse>(
-                  this, METHODID_GET_ALL_WALLETS)))
-          .build();
     }
   }
 
   /**
+   * Base class for the server implementation of the service WalletService.
    */
-  public static final class WalletServiceStub extends io.grpc.stub.AbstractAsyncStub<WalletServiceStub> {
+  public static abstract class WalletServiceImplBase
+      implements io.grpc.BindableService, AsyncService {
+
+    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
+      return WalletServiceGrpc.bindService(this);
+    }
+  }
+
+  /**
+   * A stub to allow clients to do asynchronous rpc calls to service WalletService.
+   */
+  public static final class WalletServiceStub
+      extends io.grpc.stub.AbstractAsyncStub<WalletServiceStub> {
     private WalletServiceStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -297,8 +277,10 @@ public final class WalletServiceGrpc {
   }
 
   /**
+   * A stub to allow clients to do synchronous rpc calls to service WalletService.
    */
-  public static final class WalletServiceBlockingStub extends io.grpc.stub.AbstractBlockingStub<WalletServiceBlockingStub> {
+  public static final class WalletServiceBlockingStub
+      extends io.grpc.stub.AbstractBlockingStub<WalletServiceBlockingStub> {
     private WalletServiceBlockingStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -340,8 +322,10 @@ public final class WalletServiceGrpc {
   }
 
   /**
+   * A stub to allow clients to do ListenableFuture-style rpc calls to service WalletService.
    */
-  public static final class WalletServiceFutureStub extends io.grpc.stub.AbstractFutureStub<WalletServiceFutureStub> {
+  public static final class WalletServiceFutureStub
+      extends io.grpc.stub.AbstractFutureStub<WalletServiceFutureStub> {
     private WalletServiceFutureStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -396,10 +380,10 @@ public final class WalletServiceGrpc {
       io.grpc.stub.ServerCalls.ServerStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.ClientStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.BidiStreamingMethod<Req, Resp> {
-    private final WalletServiceImplBase serviceImpl;
+    private final AsyncService serviceImpl;
     private final int methodId;
 
-    MethodHandlers(WalletServiceImplBase serviceImpl, int methodId) {
+    MethodHandlers(AsyncService serviceImpl, int methodId) {
       this.serviceImpl = serviceImpl;
       this.methodId = methodId;
     }
@@ -438,6 +422,39 @@ public final class WalletServiceGrpc {
           throw new AssertionError();
       }
     }
+  }
+
+  public static final io.grpc.ServerServiceDefinition bindService(AsyncService service) {
+    return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
+        .addMethod(
+          getCreateWalletMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              common.grpc.users.CreateWalletRequest,
+              common.grpc.users.WalletResponse>(
+                service, METHODID_CREATE_WALLET)))
+        .addMethod(
+          getGetWalletByUserIdMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              common.grpc.users.GetWalletByUserIdRequest,
+              common.grpc.users.WalletResponse>(
+                service, METHODID_GET_WALLET_BY_USER_ID)))
+        .addMethod(
+          getCheckMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              common.grpc.users.HealthCheckRequest,
+              common.grpc.users.HealthCheckResponse>(
+                service, METHODID_CHECK)))
+        .addMethod(
+          getGetAllWalletsMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              com.google.protobuf.Empty,
+              common.grpc.users.AllWalletsResponse>(
+                service, METHODID_GET_ALL_WALLETS)))
+        .build();
   }
 
   private static abstract class WalletServiceBaseDescriptorSupplier

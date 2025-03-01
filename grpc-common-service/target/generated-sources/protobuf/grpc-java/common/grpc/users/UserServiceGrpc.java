@@ -5,7 +5,7 @@ import static io.grpc.MethodDescriptor.generateFullMethodName;
 /**
  */
 @javax.annotation.Generated(
-    value = "by gRPC proto compiler (version 1.40.1)",
+    value = "by gRPC proto compiler (version 1.55.1)",
     comments = "Source: users.proto")
 @io.grpc.stub.annotations.GrpcGenerated
 public final class UserServiceGrpc {
@@ -185,73 +185,53 @@ public final class UserServiceGrpc {
 
   /**
    */
-  public static abstract class UserServiceImplBase implements io.grpc.BindableService {
+  public interface AsyncService {
 
     /**
      */
-    public void getUserDetails(common.grpc.users.UserTokenRequest request,
+    default void getUserDetails(common.grpc.users.UserTokenRequest request,
         io.grpc.stub.StreamObserver<common.grpc.users.UserDetailsMessage> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetUserDetailsMethod(), responseObserver);
     }
 
     /**
      */
-    public void updateUserSuspiciousActivity(common.grpc.users.UserSuspiciousRequest request,
+    default void updateUserSuspiciousActivity(common.grpc.users.UserSuspiciousRequest request,
         io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getUpdateUserSuspiciousActivityMethod(), responseObserver);
     }
 
     /**
      */
-    public void updateUserTransactionBlocked(common.grpc.users.UserDisabledRequest request,
+    default void updateUserTransactionBlocked(common.grpc.users.UserDisabledRequest request,
         io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getUpdateUserTransactionBlockedMethod(), responseObserver);
     }
 
     /**
      */
-    public void unblockAllUsers(common.grpc.users.UserUnblockRequest request,
+    default void unblockAllUsers(common.grpc.users.UserUnblockRequest request,
         io.grpc.stub.StreamObserver<common.grpc.users.UserUnblockResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getUnblockAllUsersMethod(), responseObserver);
-    }
-
-    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
-      return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
-          .addMethod(
-            getGetUserDetailsMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                common.grpc.users.UserTokenRequest,
-                common.grpc.users.UserDetailsMessage>(
-                  this, METHODID_GET_USER_DETAILS)))
-          .addMethod(
-            getUpdateUserSuspiciousActivityMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                common.grpc.users.UserSuspiciousRequest,
-                com.google.protobuf.Empty>(
-                  this, METHODID_UPDATE_USER_SUSPICIOUS_ACTIVITY)))
-          .addMethod(
-            getUpdateUserTransactionBlockedMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                common.grpc.users.UserDisabledRequest,
-                com.google.protobuf.Empty>(
-                  this, METHODID_UPDATE_USER_TRANSACTION_BLOCKED)))
-          .addMethod(
-            getUnblockAllUsersMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                common.grpc.users.UserUnblockRequest,
-                common.grpc.users.UserUnblockResponse>(
-                  this, METHODID_UNBLOCK_ALL_USERS)))
-          .build();
     }
   }
 
   /**
+   * Base class for the server implementation of the service UserService.
    */
-  public static final class UserServiceStub extends io.grpc.stub.AbstractAsyncStub<UserServiceStub> {
+  public static abstract class UserServiceImplBase
+      implements io.grpc.BindableService, AsyncService {
+
+    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
+      return UserServiceGrpc.bindService(this);
+    }
+  }
+
+  /**
+   * A stub to allow clients to do asynchronous rpc calls to service UserService.
+   */
+  public static final class UserServiceStub
+      extends io.grpc.stub.AbstractAsyncStub<UserServiceStub> {
     private UserServiceStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -297,8 +277,10 @@ public final class UserServiceGrpc {
   }
 
   /**
+   * A stub to allow clients to do synchronous rpc calls to service UserService.
    */
-  public static final class UserServiceBlockingStub extends io.grpc.stub.AbstractBlockingStub<UserServiceBlockingStub> {
+  public static final class UserServiceBlockingStub
+      extends io.grpc.stub.AbstractBlockingStub<UserServiceBlockingStub> {
     private UserServiceBlockingStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -340,8 +322,10 @@ public final class UserServiceGrpc {
   }
 
   /**
+   * A stub to allow clients to do ListenableFuture-style rpc calls to service UserService.
    */
-  public static final class UserServiceFutureStub extends io.grpc.stub.AbstractFutureStub<UserServiceFutureStub> {
+  public static final class UserServiceFutureStub
+      extends io.grpc.stub.AbstractFutureStub<UserServiceFutureStub> {
     private UserServiceFutureStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -396,10 +380,10 @@ public final class UserServiceGrpc {
       io.grpc.stub.ServerCalls.ServerStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.ClientStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.BidiStreamingMethod<Req, Resp> {
-    private final UserServiceImplBase serviceImpl;
+    private final AsyncService serviceImpl;
     private final int methodId;
 
-    MethodHandlers(UserServiceImplBase serviceImpl, int methodId) {
+    MethodHandlers(AsyncService serviceImpl, int methodId) {
       this.serviceImpl = serviceImpl;
       this.methodId = methodId;
     }
@@ -438,6 +422,39 @@ public final class UserServiceGrpc {
           throw new AssertionError();
       }
     }
+  }
+
+  public static final io.grpc.ServerServiceDefinition bindService(AsyncService service) {
+    return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
+        .addMethod(
+          getGetUserDetailsMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              common.grpc.users.UserTokenRequest,
+              common.grpc.users.UserDetailsMessage>(
+                service, METHODID_GET_USER_DETAILS)))
+        .addMethod(
+          getUpdateUserSuspiciousActivityMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              common.grpc.users.UserSuspiciousRequest,
+              com.google.protobuf.Empty>(
+                service, METHODID_UPDATE_USER_SUSPICIOUS_ACTIVITY)))
+        .addMethod(
+          getUpdateUserTransactionBlockedMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              common.grpc.users.UserDisabledRequest,
+              com.google.protobuf.Empty>(
+                service, METHODID_UPDATE_USER_TRANSACTION_BLOCKED)))
+        .addMethod(
+          getUnblockAllUsersMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              common.grpc.users.UserUnblockRequest,
+              common.grpc.users.UserUnblockResponse>(
+                service, METHODID_UNBLOCK_ALL_USERS)))
+        .build();
   }
 
   private static abstract class UserServiceBaseDescriptorSupplier

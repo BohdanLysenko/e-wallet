@@ -8,6 +8,7 @@ import common.grpc.users.WalletServiceGrpc;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +30,7 @@ import java.util.List;
 
 @Service
 @Transactional
+@Primary
 public class UserServiceImpl implements UserService {
 
     private final UsersRepository usersRepository;
@@ -71,7 +73,7 @@ public class UserServiceImpl implements UserService {
                     .build();
             WalletResponse response;
             try {
-                    response = walletServiceBlockingStub.getWalletByUserId(request);
+                response = walletServiceBlockingStub.getWalletByUserId(request);
             } catch (StatusRuntimeException statusRuntimeException) {
                 if (statusRuntimeException.getStatus().equals(Status.UNAUTHENTICATED)) {
                     throw new WalletNotFoundException(ExceptionKeys.NO_ACTIVE_WALLETS.getMessage());
